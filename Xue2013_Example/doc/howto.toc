@@ -1,0 +1,20 @@
+\babel@toc {english}{}
+\contentsline {section}{\numberline {A}Note}{1}{section.1}
+\contentsline {section}{\numberline {B}Example 1: Xue et al., 2013}{1}{section.2}
+\contentsline {subsection}{\numberline {1.}Create the working SlugTide directory}{1}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.}Prepare the data files}{2}{subsection.2.2}
+\contentsline {subsection}{\numberline {3.}Import the data (\texttt {importfile.m})}{3}{subsection.2.3}
+\contentsline {subsection}{\numberline {4.}Create the TideSynth directory}{3}{subsection.2.4}
+\contentsline {subsection}{\numberline {5.}Modify the parameters for the dataset (\texttt {UserParam.m})}{4}{subsection.2.5}
+\contentsline {subsection}{\numberline {6.}Set up the initial structure of wells for the test (\texttt {InitiateWells.m})}{4}{subsection.2.6}
+\contentsline {subsection}{\numberline {7.}If using the quick method (utilizing \texttt {UserParam.m} and \texttt {InitiateWells.m}, following preprocessing), skip to Step 15: \texttt {MasterWell.m}}{4}{subsection.2.7}
+\contentsline {subsection}{\numberline {8.}Load tide data (\texttt {LoadTides.m})}{4}{subsection.2.8}
+\contentsline {subsection}{\numberline {9.}Build the Well structure for the dataset (\texttt {Buildwell.m})}{4}{subsection.2.9}
+\contentsline {subsection}{\numberline {10.}Plot original water level (\texttt {PlotOriginalWL.m})}{5}{subsection.2.10}
+\contentsline {subsection}{\numberline {11.}Calculate the tidal components (\texttt {water\_respon\_time.m})}{5}{subsection.2.11}
+\contentsline {subsection}{\numberline {12.}Calculate the tidal response (\texttt {WaterResp\_general\_interp.m})}{5}{subsection.2.12}
+\contentsline {subsection}{\numberline {13.}Plot the Phase and Amplitude response (\texttt {PlotWellResponse.m})}{5}{subsection.2.13}
+\contentsline {subsection}{\numberline {14.}Calculate and plot the average amplitude and phase for wells with multiple ports over a specified time frame; \texttt {avg\_amp\_phase.m}}{5}{subsection.2.14}
+\contentsline {subsection}{\numberline {15.}Process the dataset (\texttt {MasterWell.m})}{5}{subsection.2.15}
+\contentsline {section}{Appendices}{10}{section*.8}
+\contentsline {section}{Appendix \numberline {A}SPOTL}{10}{Appendix.1.A}

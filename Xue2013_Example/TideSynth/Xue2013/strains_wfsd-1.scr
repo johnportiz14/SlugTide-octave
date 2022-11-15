@@ -1,0 +1,18 @@
+#!/bin/sh
+# Calculate theoretical earth tides with ertid at WFSD-1 from Xue2013 
+#----(outputs strain along azimuth 0 and 90 -- add together to get areal strain)
+../bin/ertid << END
+2010 1  8
+2011 218  8
+0.03333333333333333333333333333333333333333
+t
+31.1
+103.7
+0
+0
+2
+0
+90
+th0_wfsd-1
+th90_wfsd-1
+END

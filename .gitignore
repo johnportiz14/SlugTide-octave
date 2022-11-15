@@ -1,0 +1,39 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+*.asv
+
+# Ignore output files in example directoreis
+/C-1_Pump_Test_Example/*.pdf
+/C-1_Pump_Test_Example/*.png
+/C-1_Pump_Test_JPO_tides/*.pdf
+/C-1_Pump_Test_JPO_tides/*.png
+/Xue2013_Example/*.pdf
+/Xue2013_Example/*.png
+/Xue2016_Example/*.pdf
+/Xue2016_Example/*.png
+/Xue2016_Example-wEQs/*.pdf
+/Xue2016_Example-wEQs/*.png
+
+
+

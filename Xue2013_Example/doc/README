@@ -1,0 +1,14 @@
+#-------------------------------------------------- 
+#   COMPILATION INSTRUCTIONS
+#-------------------------------------------------- 
+
+1. Mount the /home/ directory to local machine:
+     $sshfs gass:/project/gas_seepage/jportiz ~/mount_gas_seepage/
+2. Compile with latexmk on remote:
+    $latexmk -f howto 
+
+3. Clean up files if needed on remote if needed:
+    $latexmk -c
+    (NOTE)
+    the following may be better, as it also removes *pdf file:
+    $latexmk -C
