@@ -304,13 +304,9 @@ def optimize_SandT_vert(pars, amp, phase_shift, period, r_case, r_well, b, z):
 
 if __name__== "__main__":
     #----User Parameters ------------------------------------------
-    #  wellnames = ['dw4','dw13','dw2','dw11']
     tau = 12.421 * 3600. #[s]       period of the M2 constituent
     rho_water = 1000.    #[kg/m3] density of water
     mu = 1e-3            #[Pa s] fluid dynamic viscosity at 20°C
-    #  r_c = 0.08           #[m] radius of well casing
-    #  r_w = 0.09           #[m] radius of well
-    #  b = 400.             #[m] thickness of open interval of well
     # READ INDIVIDUAL WELL PARAMETERS FROM A SEPARATE FILE
     with open('wellInfo') as f:
         d = f.read()
