@@ -35,5 +35,7 @@ MANIFEST
 /Xue2016_Example-wEQs/*.pdf
 /Xue2016_Example-wEQs/*.png
 
+# Ignore all TideSynth areal strains files (can be large >50 MB)
+TideSynth/*txt
 
 
