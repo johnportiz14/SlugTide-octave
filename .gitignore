@@ -20,8 +20,13 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.DS_Store
 
 *.asv
+*.swp
+*.swo
+
+old/
 
 # Ignore output files in example directoreis
 Examples/**/Results.mat 
@@ -37,7 +42,6 @@ Examples/Xue2016_Example/*.png
 Examples/Xue2016_Example-wEQs/*.pdf
 Examples/Xue2016_Example-wEQs/*.png
 
-<<<<<<< HEAD
 #try this
 Examples/**/*pdf
 Examples/**/*png
@@ -56,8 +60,6 @@ Examples/**/data/processed/*csv
 Examples/**/data/processed/*txt
 Examples/**/data/processed/.*
 
-=======
->>>>>>> d16ff0d4e770f33508306be23dec4546d350b433
 # Ignore all TideSynth areal strains files (can be large >50 MB)
 TideSynth/*txt
 
