@@ -24,16 +24,38 @@ MANIFEST
 *.asv
 
 # Ignore output files in example directoreis
-/C-1_Pump_Test_Example/*.pdf
-/C-1_Pump_Test_Example/*.png
-/C-1_Pump_Test_JPO_tides/*.pdf
-/C-1_Pump_Test_JPO_tides/*.png
-/Xue2013_Example/*.pdf
-/Xue2013_Example/*.png
-/Xue2016_Example/*.pdf
-/Xue2016_Example/*.png
-/Xue2016_Example-wEQs/*.pdf
-/Xue2016_Example-wEQs/*.png
+Examples/**/Results.mat 
+Examples/**/WellStruct.mat 
+Examples/C-1_Pump_Test_Example/*.pdf
+Examples/C-1_Pump_Test_Example/*.png
+Examples/C-1_Pump_Test_JPO_tides/*.pdf
+Examples/C-1_Pump_Test_JPO_tides/*.png
+Examples/Xue2013_Example/*.pdf
+Examples/Xue2013_Example/*.png
+Examples/Xue2016_Example/*.pdf
+Examples/Xue2016_Example/*.png
+Examples/Xue2016_Example-wEQs/*.pdf
+Examples/Xue2016_Example-wEQs/*.png
 
+#try this
+Examples/**/*pdf
+Examples/**/*png
+
+Examples/**/calcHydroProperties/output/*pdf
+Examples/**/calcHydroProperties/output/*png
+
+Examples/**/calcHydroProperties/output/*csv
+Examples/**/calcHydroProperties/output/*txt
+
+Examples/**/calcHydroProperties/output/*csv
+Examples/**/calcHydroProperties/output/*txt
+
+# Processed data files (and hidden files)
+Examples/**/data/processed/*csv
+Examples/**/data/processed/*txt
+Examples/**/data/processed/.*
+
+# Ignore all TideSynth areal strains files (can be large >50 MB)
+TideSynth/*txt
 
 
