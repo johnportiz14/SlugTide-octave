@@ -13,14 +13,25 @@ Follows the assumptions of Wang2000:
 Other relevant literature:
     Xue2013
     Xue2016
+
+Can be run several ways:
+------------------------
+>>> python calculateProperties.py
+
+--> will run the script for all the wells in the
+``wellInfo`` file
+
+>>> python calculateProperties.py <well>
+
+--> will run the script for just the well specified in
+the commandline argument. <well> must be a primary
+well key in the ``wellInfo`` file.
 '''
 import os,sys
 import math
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.special import ker,kei,kn,kv
-sys.path.append('/project/gas_seepage/jportiz/scripts')
-from tools import find_nearest
 from scipy.interpolate import interp1d
 from scipy.optimize import minimize
 from scipy.optimize import differential_evolution
@@ -33,9 +44,7 @@ from datetime import datetime
 #MATPLOTLIBRC PLOTTING PARAMETERS
 # Load up sansmath so that math --> helvetica font
 # Also need to tell tex to turn on sansmath package
-plt.rcParams['text.latex.preamble'] = [
-    r'\usepackage{sansmath}',
-    r'\sansmath']
+plt.rcParams['text.latex.preamble'] = r'\usepackage{sansmath}'
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = 'Helvetica'
 plt.rcParams['axes.labelweight']=u'normal'
@@ -318,6 +327,9 @@ if __name__== "__main__":
     if not os.path.exists(os.path.join(os.getcwd(),'output')):
         os.makedirs('output')
 
+    # Detect user operating system
+    platform = sys.platform; platform = platform.lower()
+
     #--------------------------------------------------------------
     #  CALCULATE HYDROGEOLOGIC PROPERTIES FOR EACH WELL
     #--------------------------------------------------------------
@@ -445,7 +457,7 @@ if __name__== "__main__":
         S_s_avg = S_avg/b
         T_avg = np.mean(T_array)
         k_avg = np.mean(k_array)
-        tname ='output/avgProperties_{}'.format(os.path.basename(prefix))
+        tname = os.path.join('output','avgProperties_{}'.format(os.path.basename(prefix)))
         with open(tname, 'w') as f:
             f.write('------------------------\n')
             f.write('Average Properties ({}):\n'.format(os.path.basename(prefix)))
@@ -457,7 +469,10 @@ if __name__== "__main__":
             f.write('D_avg   = {:.4e} [m2/s]\n'.format(T_avg/S_avg))
             f.write('R_avg   = {:.2f} [m]\n'.format(np.sqrt(T_avg/S_avg*tau)))
         print()
-        os.system('cat '+tname)
+        if 'win' in platform:
+            os.system('type '+tname)
+        else:
+            os.system('cat '+tname)
 
         #------------------------------------------------------------ 
         # PLOT THE S AND T TIMESERIES 
