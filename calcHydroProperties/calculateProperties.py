@@ -333,7 +333,7 @@ if __name__== "__main__":
     if not os.path.exists(os.path.join(os.getcwd(),'output')):
         os.makedirs('output')
 
-		# Detect user operating system
+    # Detect user operating system
     platform = sys.platform; platform = platform.lower()
 
     #--------------------------------------------------------------
