@@ -80,8 +80,8 @@ Well(iWell).ttide_cut=ttide_cut;
 
 %%%%%%%
 Nque=1/dt/2;
-f_low=1/(30/24)/Nque; % 30 hr     %%%[JPO] THESE SHOULD USE THE VALUES FROM UserParam.m INSTEAD!!!
-f_hig=1/(10/24)/Nque; % 10 hr     %%%[JPO] THESE SHOULD USE THE VALUES FROM UserParam.m INSTEAD!!!
+f_low=1/(freq_low)/Nque; 
+f_hig=1/(freq_high)/Nque; 
 [b,a]=butter(2,[f_low f_hig],'bandpass');
 
 Wcuti=(Wcuti-mean(nonzeros(Wcuti))).*(Wcuti~=0);
@@ -113,6 +113,13 @@ tidecut_f=filtfilt(b,a,tidecut);
 Wcuti_f_ne0=Wcuti_f~=0;
 tidecut_f=tidecut_f.*(Wcuti_f_ne0);
 %%%%%%%%
+
+%%%%%%%%%%%%%%%
+% [JPO] new - export the filtered, detrended data for external analysis
+filename = strcat(Well(iWell).name,'_',num2str(iport),'_filtered_detrended.csv');
+twocol = [ tcuti', -Wcuti_f' ];
+dlmwrite(filename,twocol,'precision',20);  % csvwrite() cuts off the decimal precision
+%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%
 t_win=t_win; % days

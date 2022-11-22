@@ -1,16 +1,20 @@
 % initialize wells%%    
 % Build the Well Structure
-% The user will edit the inputs for each well in the dataset to build the Well Structure for the test.
+%   - The user will edit the inputs for each well in the dataset to build the Well Structure for the test.
+%     If the water level data for all wells are formatted the same (e.g.,
+%     format 'S), simply copy that section and edit the iWell number and file
+%     names for each well.
+%   - Comment out iWell blocks for formats you aren't using.
 
-
+% Template for wells with format 'S'
 iWell=1;
-        WellInitial(iWell).filename='WellS.csv'; % name of data file for Well A
-        WellInitial(iWell).Wellname='Well S'; % name of Well A
-        WellInitial(iWell).format='S'; % format code for Well A
-        WellInitial(iWell).startrow=2; % start row of data to be analyzed from csv file
+        WellInitial(iWell).filename='data/processed/WellS.csv'; % name of data file for Well 1
+        WellInitial(iWell).Wellname='Well-S'; % name of Well 1
+        WellInitial(iWell).format='S'; % format code for Well 1
+        WellInitial(iWell).startrow=2; % start row of data to be analyzed from csv file (use 1 if no header row)
         WellInitial(iWell).endrow=1e9; %inf; % end row of data to be analyzed from csv file
-        WellInitial(iWell).tidename='tidenameS.dat'; % name of synthetic tide for Well A
-        WellInitial(iWell).nports=1; % number of ports in Well A
+        WellInitial(iWell).tidename='areal_strains_S.txt'; % name of synthetic tide for Well 1
+        WellInitial(iWell).nports=1; % number of ports in Well 1
         
         % If there is more than one noise field in the data add start and
         % end dates as necessary. Remember to update BuildWell as well.
@@ -20,15 +24,15 @@ iWell=1;
         doi=0; % depth to open interval in ft
         WellInitial(iWell).dom=(doi)*0.3048; % convert to meters
 
-        
+   % Template for wells with format 'A'     
    iWell=2;
-        WellInitial(iWell).filename='WellA.csv'; % name of data file for Well A
-        WellInitial(iWell).Wellname='Well A'; % name of Well A
-        WellInitial(iWell).format='A'; % format code for Well A
+        WellInitial(iWell).filename='data/processed/WellA.csv'; % name of data file for Well 2
+        WellInitial(iWell).Wellname='Well A'; % name of Well 2
+        WellInitial(iWell).format='A'; % format code for Well 2
         WellInitial(iWell).startrow=55; % start row of data to be analyzed from csv file
         WellInitial(iWell).endrow=1e9; %inf; % end row of data to be analyzed from csv file
-        WellInitial(iWell).tidename='tidenameA.dat'; % name of synthetic tide for Well A
-        WellInitial(iWell).nports=1; % number of ports in Well A
+        WellInitial(iWell).tidename='areal_strains_A.txt'; % name of synthetic tide for Well 2
+        WellInitial(iWell).nports=1; % number of ports in Well 2
         
         % If there is more than one noise field in the data add start and
         % end dates as necessary. Remember to update BuildWell as well.
@@ -39,15 +43,15 @@ iWell=1;
         WellInitial(iWell).dom=(doi)*0.3048; % convert to meters
        
         
-        
+   % Template for wells with format 'B' (multiple ports)     
    iWell=3;
-        WellInitial(iWell).filename='WellB.csv'; % name of data file for Well B
-        WellInitial(iWell).Wellname='Well B'; % name of Well B
-        WellInitial(iWell).format='B'; % format code for Well B
+        WellInitial(iWell).filename='data/processed/WellB.csv'; % name of data file for Well 3
+        WellInitial(iWell).Wellname='Well B'; % name of Well 3
+        WellInitial(iWell).format='B'; % format code for Well 3
         WellInitial(iWell).startrow=22;% start row of data to be analyzed from csv file
         WellInitial(iWell).endrow=1e9; %inf; % end row of data to be analyzed from csv file
-        WellInitial(iWell).tidename='tidenameB.dat'; % name of synthetic tide for Well B
-        WellInitial(iWell).nports=8; % number of ports in Well B
+        WellInitial(iWell).tidename='areal_strains_B.txt'; % name of synthetic tide for Well 3
+        WellInitial(iWell).nports=8; % number of ports in Well 3
         
         % If there is more than one noise field per well in the data add
         % start and end dates as necessary. Remember to update BuildWell as well.

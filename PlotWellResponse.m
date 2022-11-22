@@ -18,8 +18,8 @@ Well(iWell).Ph(ff)=Well(iWell).Ph(ff)-360;
 
 UserParam;
 % EQ_t=datenum(EQtime)+cUTC; %%%%UTC %%%% EQ
-% t_pre=EQ_t-29.5307./2; %%%% EQ
-% t_post=EQ_t+29.5307./2; %%%% EQ
+% t_pre=EQ_t-t_win/2; %%%% EQ
+% t_post=EQ_t+t_win/2; %%%% EQ
 % kk=1:length(Well(iWell).T); % EQ
 % mm=find(Well(iWell).T(kk)>t_pre & Well(iWell).T(kk)<t_post); %%%% EQ
 % Well(iWell).Ph(mm)=NaN; %%%% EQ
@@ -29,7 +29,7 @@ UserParam;
 % Well(iWell).jj1=find(Well(iWell).T(kk)>t_pre-30 & Well(iWell).T(kk)<t_pre); %%%% EQ
 % Well(iWell).pre_pha=nanmean(Well(iWell).Ph(Well(iWell).jj1)); %%%% EQ
 % Well(iWell).pre_amp=nanmean(Well(iWell).s(Well(iWell).jj1)); %%%% EQ
-% Well(iWell).jj2=find(Well(iWell).T(kk)>t_post & Well(iWell).T(kk)<t_post+30); %%%% EQ
+% Well(iWell).jj2a=find(Well(iWell).T(kk)>t_post & Well(iWell).T(kk)<t_post+30); %%%% EQ
 % Well(iWell).post_pha=nanmean(Well(iWell).Ph(Well(iWell).jj2)); %%%% EQ
 % Well(iWell).post_amp=nanmean(Well(iWell).s(Well(iWell).jj2)); %%%% EQ
 % 
@@ -55,7 +55,7 @@ title(Well(iWell).name);
 % plot([EQ_t EQ_t],[nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2],'r--','LineWidth',0.5);hold on %%%% EQ
 % plot(Well(iWell).T(Well(iWell).jj1),Well(iWell).s(Well(iWell).jj1),'r.','MarkerSize',6) %%%% EQ
 % plot(Well(iWell).T(Well(iWell).jj2),Well(iWell).s(Well(iWell).jj2),'r.','MarkerSize',6) %%%% EQ
-%xlim([0 Well(iWell).t(end)+29.5307/2]);
+%xlim([0 Well(iWell).t(end)+t_win/2]);
 % xlim([datenum('PlotTime3') datenum('PlotTime4')])
 % ylim([nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2])
 ylabel('Amplitude (1/m)');
@@ -96,8 +96,8 @@ Well(iWell).Ph(ff)=Well(iWell).Ph(ff)-360;
 
 UserParam;
 % EQ_t=datenum(EQtime)+cUTC; %%%%UTC  %%%% EQ
-% t_pre=EQ_t-29.5307./2; %%%% EQ
-% t_post=EQ_t+29.5307./2; %%%% EQ
+% t_pre=EQ_t-t_win/2; %%%% EQ
+% t_post=EQ_t+t_win/2; %%%% EQ
 % kk=1:length(Well(iWell).T); %%%% EQ
 % mm=find(Well(iWell).T(kk)>t_pre & Well(iWell).T(kk)<t_post); %%%% EQ
 % Well(iWell).Ph(mm)=NaN; %%%% EQ
@@ -133,7 +133,7 @@ title(Well(iWell).name);
 % plot([EQ_t EQ_t],[nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2],'r--','LineWidth',0.5);hold on %%%% EQ
 % plot(Well(iWell).T(Well(iWell).jj1),Well(iWell).s(Well(iWell).jj1),'r.','MarkerSize',6) %%%% EQ
 % plot(Well(iWell).T(Well(iWell).jj2),Well(iWell).s(Well(iWell).jj2),'r.','MarkerSize',6) %%%% EQ
-%xlim([0 Well(iWell).t(end)+29.5307/2]);
+%xlim([0 Well(iWell).t(end)+t_win/2]);
 % xlim([datenum('PlotTime3') datenum('PlotTime4')])
 % ylim([nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2])
 ylabel('Amplitude (1/m)');
