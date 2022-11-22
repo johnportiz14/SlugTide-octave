@@ -8,7 +8,7 @@ iWell=1;
         WellInitial(iWell).Wellname='Well S'; % name of Well A
         WellInitial(iWell).format='S'; % format code for Well A
         WellInitial(iWell).startrow=2; % start row of data to be analyzed from csv file
-        WellInitial(iWell).endrow=inf; % end row of data to be analyzed from csv file
+        WellInitial(iWell).endrow=1e9; %inf; % end row of data to be analyzed from csv file
         WellInitial(iWell).tidename='tidenameS.dat'; % name of synthetic tide for Well A
         WellInitial(iWell).nports=1; % number of ports in Well A
         
@@ -17,8 +17,8 @@ iWell=1;
         WellInitial(iWell).noisestart1='2012-10-18 15:00'; % start of noise in data
         WellInitial(iWell).noiseend1='2012-10-18 15:30'; % end of noise in data
         
-        do=0; % depth to open interval in ft
-        WellInitial(iWell).dom=(do)*0.3048; % convert to meters
+        doi=0; % depth to open interval in ft
+        WellInitial(iWell).dom=(doi)*0.3048; % convert to meters
 
         
    iWell=2;
@@ -26,7 +26,7 @@ iWell=1;
         WellInitial(iWell).Wellname='Well A'; % name of Well A
         WellInitial(iWell).format='A'; % format code for Well A
         WellInitial(iWell).startrow=55; % start row of data to be analyzed from csv file
-        WellInitial(iWell).endrow=inf; % end row of data to be analyzed from csv file
+        WellInitial(iWell).endrow=1e9; %inf; % end row of data to be analyzed from csv file
         WellInitial(iWell).tidename='tidenameA.dat'; % name of synthetic tide for Well A
         WellInitial(iWell).nports=1; % number of ports in Well A
         
@@ -35,8 +35,8 @@ iWell=1;
         WellInitial(iWell).noisestart1='2012-10-18 15:00'; % start of noise in data
         WellInitial(iWell).noiseend1='2012-10-18 15:30'; % end of noise in data
         
-        do=0; % depth to open interval in ft
-        WellInitial(iWell).dom=(do)*0.3048; % convert to meters
+        doi=0; % depth to open interval in ft
+        WellInitial(iWell).dom=(doi)*0.3048; % convert to meters
        
         
         
@@ -45,7 +45,7 @@ iWell=1;
         WellInitial(iWell).Wellname='Well B'; % name of Well B
         WellInitial(iWell).format='B'; % format code for Well B
         WellInitial(iWell).startrow=22;% start row of data to be analyzed from csv file
-        WellInitial(iWell).endrow=inf; % end row of data to be analyzed from csv file
+        WellInitial(iWell).endrow=1e9; %inf; % end row of data to be analyzed from csv file
         WellInitial(iWell).tidename='tidenameB.dat'; % name of synthetic tide for Well B
         WellInitial(iWell).nports=8; % number of ports in Well B
         
