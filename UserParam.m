@@ -25,13 +25,13 @@ PlotTime2='2013-06-30'; % Date of ending of plot in 'YYYY-MM-DD' format
     % beginning and ending of plot should match the beginning and ending of the dataset timeframe.
 
 % %PlotOriginalWL.m, PlotWellResponse.m
-% EQtime='2003-12-22 12:16:6.3'; % Date of earthquake in 'YYYY-MM-DD hh:mm:ss' format 
+% EQtime='2003-12-22 12:16:6'; % Date of earthquake in 'YYYY-MM-DD hh:mm:ss' format 
             % (if there is an earthquake occurence in the data).
 
 %WaterResp_general_interp.m
-freq_low=30/24; % 30 hour
-freq_high=10/24; % 10 hour
-t_win=29.5307; % days
+freq_low=30/24; %[d] 30 hour
+freq_high=10/24; %[d] 10 hour
+t_win=29.5307; %[d] days
 n_shift=0.1; % percent of each shift of data segment 
 per_gap=0.1; % percent gap of the time window
 
