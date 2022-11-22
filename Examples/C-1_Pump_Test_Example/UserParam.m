@@ -25,7 +25,7 @@ PlotTime2='2004-07-01'; % Date of ending of plot in 'YYYY-MM-DD' format
     % beginning and ending of plot should match the beginning and ending of the dataset timeframe.
 
 % %PlotOriginalWL.m, PlotWellResponse.m
-EQtime='2003-12-22 12:16:6.3'; % Date of earthquake in 'YYYY-MM-DD hh:mm:ss' format 
+EQtime='2003-12-22 12:16:6'; % Date of earthquake in 'YYYY-MM-DD hh:mm:ss' format 
             % (if there is an earthquake occurence in the data).
             
 %WaterResp_general_interp.m

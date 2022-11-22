@@ -8,34 +8,34 @@ iWell=1;
         WellInitial(iWell).Wellname='WS-14 simple'; % name of Well A
         WellInitial(iWell).format='S'; % format code for Well A
         WellInitial(iWell).startrow=152; % start row of data to be analyzed from csv file
-        WellInitial(iWell).endrow=inf; % end row of data to be analyzed from csv file
+        WellInitial(iWell).endrow=1e9;%inf; % end row of data to be analyzed from csv file
         WellInitial(iWell).tidename='SSFL_tides_WS-14.txt'; % name of synthetic tide for Well A
         WellInitial(iWell).nports=1; % number of ports in Well A
         
         % If there is more than one noise field in the data add start and
         % end dates as necessary. Remember to update BuildWell as well.
-        WellInitial(iWell).noisestart1='2003/12/22'; % start of noise in data
-        WellInitial(iWell).noiseend1='2003/12/27'; % end of noise in data                     
+        WellInitial(iWell).noisestart1='2003-12-22'; % start of noise in data
+        WellInitial(iWell).noiseend1='2003-12-27'; % end of noise in data                     
         
-        do=40; % depth to open interval in ft
-        WellInitial(iWell).dom=(do)*0.3048; % convert to meters
+        doi=40; % depth to open interval in ft
+        WellInitial(iWell).dom=(doi)*0.3048; % convert to meters
 
    iWell=2;
         WellInitial(iWell).filename='WS-14.csv'; % name of data file for Well A
         WellInitial(iWell).Wellname='WS-14'; % name of Well A
         WellInitial(iWell).format='A'; % format code for Well A
         WellInitial(iWell).startrow=190; % start row of data to be analyzed from csv file
-        WellInitial(iWell).endrow=inf; % end row of data to be analyzed from csv file
+        WellInitial(iWell).endrow=1e9;%inf; % end row of data to be analyzed from csv file
         WellInitial(iWell).tidename='SSFL_tides_WS-14.txt'; % name of synthetic tide for Well A
         WellInitial(iWell).nports=1; % number of ports in Well A
         
         % If there is more than one noise field in the data add start and
         % end dates as necessary. Remember to update BuildWell as well.
-        WellInitial(iWell).noisestart1='2003/12/22'; % start of noise in data
-        WellInitial(iWell).noiseend1='2003/12/27'; % end of noise in data                     
+        WellInitial(iWell).noisestart1='2003-12-22'; % start of noise in data
+        WellInitial(iWell).noiseend1='2003-12-27'; % end of noise in data                     
         
-        do=40; % depth to open interval in ft
-        WellInitial(iWell).dom=(do)*0.3048; % convert to meters
+        doi=40; % depth to open interval in ft
+        WellInitial(iWell).dom=(doi)*0.3048; % convert to meters
        
         
    iWell=3;
@@ -49,32 +49,32 @@ iWell=1;
         
         % If there is more than one noise field per well in the data add
         % start and end dates as necessary. Remember to update BuildWell as well.
-        WellInitial(iWell).noisestart_1='2003/8/25'; % start of noise in data, port 1
-        WellInitial(iWell).noiseend_1='2003/5/1'; % end of noise in data, port 1
-        WellInitial(iWell).noisestart_2='2003/8/25'; % start of noise in data, port 3
-        WellInitial(iWell).noiseend_2='2003/5/1'; % end of noise in data, port 3
-        WellInitial(iWell).noisestart_3_1='2003/10/11'; % start of noise in data, port 4                                  %%
-        WellInitial(iWell).noiseend_3_1='2003/10/12 12:00:00'; % end of noise in data, port 4                             %%
-        WellInitial(iWell).noisestart_3_2='2003/12/25 12:00:00'; % start of noise in data, port 4                         %%
-        WellInitial(iWell).noiseend_3_2='2003/12/26 12:00:00'; % end of noise in data, port 4                             %%
-        WellInitial(iWell).noisestart_3_3='2004/1/21'; % start of noise in data, port 4                                   %%
-        WellInitial(iWell).noiseend_3_3='2004/1/26'; % end of noise in data, port 4                                       %%
-        WellInitial(iWell).noisestart_3_4='2004/3/6'; % start of noise in data, port 4                                    %%
-        WellInitial(iWell).noiseend_3_4='2004/3/11'; % end of noise in data, port 4                                       %%
-        WellInitial(iWell).noisestart_3_5='2004/3/29 18:00:00'; % start of noise in data, port 4                          %%
-        WellInitial(iWell).noiseend_3_5='2004/4/3'; % end of noise in data, port 4                                        %%
-        WellInitial(iWell).noisestart_4_1='2003/10/21 12:00:00'; % start of noise in data, port 6                         %%
-        WellInitial(iWell).noiseend_4_1='2003/10/23'; % end of noise in data, port 6                                      %%
-        WellInitial(iWell).noisestart_4_2='2004/3/28'; % start of noise in data, port 6                                   %%
-        WellInitial(iWell).noiseend_4_2='2004/5/1'; % end of noise in data, port 6                                        %%
-        WellInitial(iWell).noisestart_5='2004/3/29 18:00:00'; % start of noise in data, port 7
-        WellInitial(iWell).noiseend_5='2004/4/3'; % end of noise in data, port 7
-        WellInitial(iWell).noisestart_6_1='2004/1/18'; % start of noise in data, port 8                                   %%
-        WellInitial(iWell).noiseend_6_1='2004/1/23'; % end of noise in data, port 8                                       %%
-        WellInitial(iWell).noisestart_6_2='2004/2/16'; % start of noise in data, port 8                                   %%
-        WellInitial(iWell).noiseend_6_2='2004/2/19'; % end of noise in data, port 8                                       %%
-        WellInitial(iWell).noisestart_6_3='2004/3/29 18:00:00'; % start of noise in data, port 8                          %%
-        WellInitial(iWell).noiseend_6_3='2004/4/3'; % end of noise in data, port 8                                        %%
+        WellInitial(iWell).noisestart_1='2003-8-25'; % start of noise in data, port 1
+        WellInitial(iWell).noiseend_1='2003-5-1'; % end of noise in data, port 1
+        WellInitial(iWell).noisestart_2='2003-8-25'; % start of noise in data, port 3
+        WellInitial(iWell).noiseend_2='2003-5-1'; % end of noise in data, port 3
+        WellInitial(iWell).noisestart_3_1='2003-10-11'; % start of noise in data, port 4                                  %%
+        WellInitial(iWell).noiseend_3_1='2003-10-12 12:00:00'; % end of noise in data, port 4                             %%
+        WellInitial(iWell).noisestart_3_2='2003-12-25 12:00:00'; % start of noise in data, port 4                         %%
+        WellInitial(iWell).noiseend_3_2='2003-12-26 12:00:00'; % end of noise in data, port 4                             %%
+        WellInitial(iWell).noisestart_3_3='2004-1-21'; % start of noise in data, port 4                                   %%
+        WellInitial(iWell).noiseend_3_3='2004-1-26'; % end of noise in data, port 4                                       %%
+        WellInitial(iWell).noisestart_3_4='2004-3-6'; % start of noise in data, port 4                                    %%
+        WellInitial(iWell).noiseend_3_4='2004-3-11'; % end of noise in data, port 4                                       %%
+        WellInitial(iWell).noisestart_3_5='2004-3-29 18:00:00'; % start of noise in data, port 4                          %%
+        WellInitial(iWell).noiseend_3_5='2004-4-3'; % end of noise in data, port 4                                        %%
+        WellInitial(iWell).noisestart_4_1='2003-10-21 12:00:00'; % start of noise in data, port 6                         %%
+        WellInitial(iWell).noiseend_4_1='2003-10-23'; % end of noise in data, port 6                                      %%
+        WellInitial(iWell).noisestart_4_2='2004-3-28'; % start of noise in data, port 6                                   %%
+        WellInitial(iWell).noiseend_4_2='2004-5-1'; % end of noise in data, port 6                                        %%
+        WellInitial(iWell).noisestart_5='2004-3-29 18:00:00'; % start of noise in data, port 7
+        WellInitial(iWell).noiseend_5='2004-4-3'; % end of noise in data, port 7
+        WellInitial(iWell).noisestart_6_1='2004-1-18'; % start of noise in data, port 8                                   %%
+        WellInitial(iWell).noiseend_6_1='2004-1-23'; % end of noise in data, port 8                                       %%
+        WellInitial(iWell).noisestart_6_2='2004-2-16'; % start of noise in data, port 8                                   %%
+        WellInitial(iWell).noiseend_6_2='2004-2-19'; % end of noise in data, port 8                                       %%
+        WellInitial(iWell).noisestart_6_3='2004-3-29 18:00:00'; % start of noise in data, port 8                          %%
+        WellInitial(iWell).noiseend_6_3='2004-4-3'; % end of noise in data, port 8                                        %%
 %         WellInitial(iWell).noisestart_7=''; % start of noise in data, port g
 %         WellInitial(iWell).noiseend_7=''; % end of noise in data, port g
 %         WellInitial(iWell).noisestart_8=''; % start of noise in data, port h
