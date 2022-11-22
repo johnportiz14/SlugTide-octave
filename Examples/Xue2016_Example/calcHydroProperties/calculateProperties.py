@@ -428,12 +428,12 @@ if __name__== "__main__":
         #------------------------------------------------------------ 
         #---- Storage Coefficient Output
         twocols = np.column_stack( (t,S_array) )
-        with open(os.path.join('output',os.path.basename(prefix)+'_storativity.csv'), 'w') as f:
+        with open(os.path.join('output',os.path.basename(prefix)+'_storativity.csv'), 'w', newline='') as f:
             writer = csv.writer(f,delimiter=',')
             writer.writerows(twocols)
         #---- Transmissivity Output 
         twocols = np.column_stack( (t,T_array) )
-        with open(os.path.join('output',os.path.basename(prefix)+'_transmissivity.csv'), 'w') as f:
+        with open(os.path.join('output',os.path.basename(prefix)+'_transmissivity.csv'), 'w', newline='') as f:
             writer = csv.writer(f,delimiter=',')
             writer.writerows(twocols)
         #---- Permeability Output 
@@ -441,12 +441,12 @@ if __name__== "__main__":
         k_array = []
         for T in T_array: k_array.append(calc_perm(T,b=b))
         twocols = np.column_stack( (t,k_array) )
-        with open(os.path.join('output',os.path.basename(prefix)+'_permeability.csv'), 'w') as f:
+        with open(os.path.join('output',os.path.basename(prefix)+'_permeability.csv'), 'w', newline='') as f:
             writer = csv.writer(f,delimiter=',')
             writer.writerows(twocols)
         #---- Optimization Errors (total error) 
         twocols = np.column_stack( (t,err_array) )
-        with open(os.path.join('output',os.path.basename(prefix)+'_error.csv'), 'w') as f:
+        with open(os.path.join('output',os.path.basename(prefix)+'_error.csv'), 'w', newline='') as f:
             writer = csv.writer(f,delimiter=',')
             writer.writerows(twocols)
 

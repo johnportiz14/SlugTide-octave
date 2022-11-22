@@ -11,24 +11,50 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.special import ker,kei,kn,kv
-sys.path.append('/project/gas_seepage/jportiz/scripts')
-from tools import find_nearest
 from scipy.interpolate import interp1d
 from scipy.optimize import minimize
 from scipy.optimize import differential_evolution
 import csv
+import glob
+import ast
+from datetime import datetime
 
 #-----------------------------------------------------
 #MATPLOTLIBRC PLOTTING PARAMETERS
 # Load up sansmath so that math --> helvetica font
 # Also need to tell tex to turn on sansmath package
-plt.rcParams['text.latex.preamble'] = [
-    r'\usepackage{sansmath}',
-    r'\sansmath']
+plt.rcParams['text.latex.preamble'] = r'\usepackage{sansmath}'
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = 'Helvetica'
 plt.rcParams['axes.labelweight']=u'normal'
 #-----------------------------------------------------
+
+def floatHourToTime(fh):
+    hours, hourSeconds = divmod(fh, 1)
+    minutes,seconds = divmod(hourSeconds * 60, 1)
+    return (
+        int(hours),
+        int(minutes),
+        int(seconds * 60),
+    )
+
+def excelSerial2python(serial_date):
+    "Convert an Excel serial date to a Python datetime object"
+    # Get Excel serial dates start at  1/1/1900
+    dt = datetime.fromordinal(datetime(1900, 1, 1).toordinal() + int(serial_date) - 2)
+    tt = dt.timetuple()
+    hour, minute, second = floatHourToTime(serial_date % 1)
+    dt = dt.replace(hour=hour, minute=minute, second=second)
+    return dt
+
+def matlabSerial2python(serial_date):
+    "Convert a Matlab serial date to a Python datetime object"
+    # Matlab's date0 is 1899-12-30
+    date0 = 693960
+    # Subtract this from the serial datenum to get Excel serial 
+    serial_date_E = serial_date-date0
+    dt = excelSerial2python(serial_date_E)
+    return dt
 
 def calc_eta(E,F):
     '''(Eqn 16) Phase shift '''
@@ -209,172 +235,204 @@ def optimize_SandT(pars, amp, phase_shift, period, r_case, r_well, b):
 if __name__== "__main__":
     #----User Parameters ------------------------------------------
     tau = 12.421 * 3600. #[s]       period of the M2 constituent
-    #  freq_Hz = 1/tau      #[1/s]     freq   of the M2 constituent
-    #  ang_freq = freq_Hz*2.*np.pi #   angular freq  ''     ''
-    r_c = 0.08           #[m] radius of well casing
-    r_w = 0.09           #[m] radius of well
-    b = 400.             #[m] thickness of open interval of well
+    #r_c = 0.08           #[m] radius of well casing
+    #r_w = 0.09           #[m] radius of well
+    #b = 400.             #[m] thickness of open interval of well
     rho_water = 1000.    #[kg/m3] density of water
     mu = 1e-3            #[Pa s] fluid dynamic viscosity at 20°C
-    #  # Set fixed vals
-    #  user_eta = -20. #[°]   phase shift
-    #  ampl = 6.34e-7   #[1/m] amplitude response
+    # READ INDIVIDUAL WELL PARAMETERS FROM A SEPARATE FILE
+    with open('wellInfo') as f:
+        d = f.read()
+    wellInfo = ast.literal_eval(d)
+    wellList = wellInfo.keys()
+    # IF USER RUNS SCRIPT WITH A SINGLE WELL ARGUMENT, ONLY CALCULATE THAT WELL
+    #---- Must be a well name that exists in wellInfo file
+    if len(sys.argv)>1: wellList = [sys.argv[1]]
     #--------------------------------------------------------------
 
-    # Read the amplitude and phase responses from csv files (skip nans)
-    prefix = '../Well_WFSD-1_1'
-    ampl_data = np.genfromtxt(prefix+'_amp.csv', delimiter=',',missing_values='NaN')
-    eta_data = np.genfromtxt(prefix+'_pha.csv', delimiter=',',missing_values='NaN') 
+    # Make 'output/' directory if doesn't exist
+    if not os.path.exists(os.path.join(os.getcwd(),'output')):
+        os.makedirs('output')
+        
+    # Detect user operating system
+    platform = sys.platform; platform = platform.lower()
+    
+    #--------------------------------------------------------------
+    #  CALCULATE HYDROGEOLOGIC PROPERTIES FOR EACH WELL
+    #--------------------------------------------------------------
+    for well in wellList:
+        print('well : '+well)
+        prefix = '../{}'.format(wellInfo[well]['prefix'])
+        r_c = wellInfo[well]['r_c']
+        r_w = wellInfo[well]['r_w']
+        b   = wellInfo[well]['b']
+        flowModel = wellInfo[well]['flowModel'] #horizontal or vertical flow model?
+        if 'vert' in flowModel:
+            try: z = wellInfo[well]['z']  #probably only need depth for vert flow
+            except KeyError:
+                print('\nERROR: you specified a vertical flow model but did not provide a value for "z".')
+                break    
 
-    # Solve for these variables 
-    S_array = []
-    T_array = []
-
-    t = []  #make new time array because some ampl and eta have nans
-    success_array = []  # record when diff evolution algorithm succeeds
-    # Calculate S and T for each amplitude-response/phase-shift pair in time
-    for i in range(len(ampl_data)):
-        # If the value is a NaN, skip it and go to next row
-        if np.isnan(ampl_data[i,1]) == True: continue
-
-        ampl = ampl_data[i,1]
-        # Invert ampl so units are same as in Xue2016 (m/str)
-        ampl = 1/ampl
-        eta = eta_data[i,1]
-
-        print('Beginning differential evolution..')
-        # Set guess bounds for log(S) and log(T)
-        bnds = ( (-6, -1),       # log bounds for S
-                 (-8, -1), )     # log bounds for T
-        results = differential_evolution(optimize_SandT, bounds = bnds, args=(ampl, eta, tau, r_c, r_w, b), tol=1e-10, atol=1e-10)
-        best_S = 10**results.x[0]
-        best_T = 10**results.x[1]
-        # TEST
-        w = calc_w(tau)
-        E = calc_E(w,best_S,best_T, r_c, r_w)
-        F = calc_F(w,best_S,best_T, r_c, r_w)
-        A_test = (E**2 + F**2)**(-0.5)
-        A_error = (ampl - A_test)**2
-        A_g = calc_A(E,F)                   #calculate resulting amplitude response
-        eta_g = np.degrees(calc_eta( E,F )) #calculate resulting phase shift
-        #
-        print('\n\nFor the parameters:')
-        print('  Ampl. resp.: {} '.format(ampl))
-        print('  Phase shift: {}°'.format(eta))
-        print('----')
-        #  print('  A_guess    : {} '.format(A_g))
-        #  print('  eta_guess  : {}° '.format(eta_g))
-        print('--------------------------')
-        print('Total Error = {}'.format(results.fun))
-        print('after {} evaluations...'.format(results.nfev))
-        print('S        = {:.4e}      '.format(best_S))
-        print('T        = {:.4e} m^2/s'.format(best_T))
-        print('----')
-        #  # This only works for the first data point
-        #  print('From literature (eyeball estimate):')
-        #  print('S_actual ~ {:.4e}      '.format(2.34e-4))
-        #  print('T_actual ~ {:.4e} m^2/s'.format(4.30e-6))
+        # Read the amplitude and phase responses from csv files (skip nans)
+    #    prefix = '../Well_WFSD-1_1'
+        ampl_data = np.genfromtxt(prefix+'_amp.csv', delimiter=',',missing_values='NaN')
+        eta_data = np.genfromtxt(prefix+'_pha.csv', delimiter=',',missing_values='NaN') 
 
 
-        print('Differential evolution successful?')
-        print(results.success)
-        success_array.append(results.success)
-        #  #---------------------------------------- 
-        #  #---------------------------------------- 
-        #  # MINIMIZE FUNCTION
-        #  #---------------------------------------- 
-        #  # Try running optimize after differential evolution to fine-tune the guesses...
-        #  print()
-        #  print('Now beginning minimization...')
-        #  S_de = results.x[0]
-        #  T_de = results.x[1]
-        #  # new bounds for the minimize function
-        #  bnds = ( (-6, -4),
-                 #  (-8, -4), )
-        #  results = minimize(optimize_SandT, x0=(S_de,T_de), args=(ampl, user_eta, tau, r_c, r_w), bounds = bnds, tol=1e-20) #works well, fast
-        best_S = 10**results.x[0]
-        best_T = 10**results.x[1]
-        print('\nFor the parameters:')
-        print('  Ampl. resp.: {} '.format(ampl))
-        print('  Phase shift: {}°'.format(eta))
-        print('--------------------------')
-        print('Total Error = {}'.format(results.fun))
-        print('after {} evaluations...'.format(results.nfev))
-        print('S    = {:.4e}      '.format(best_S))
-        print('T    = {:.4e} m^2/s'.format(best_T))
 
-        t.append(ampl_data[i,0])
-        S_array.append(best_S)
-        T_array.append(best_T)
+        # Solve for these variables 
+        S_array = []
+        T_array = []
 
-    scount = 0
-    for s in success_array:
-        if s: scount+=1
-    print('success % = {:.3f}%'.format(scount/len(success_array)*100))
-    S_stdev = np.std(S_array)
-    print('st dev of S   = {}'.format(S_stdev))
-    print('min(S)  = {:e}'.format(min(S_array)))
-    print('max(S)  = {:e}'.format(max(S_array)))
+        t = []  #make new time array because some ampl and eta have nans
+        success_array = []  # record when diff evolution algorithm succeeds
+        # Calculate S and T for each amplitude-response/phase-shift pair in time
+        for i in range(len(ampl_data)):
+            # If the value is a NaN, skip it and go to next row
+            if np.isnan(ampl_data[i,1]) == True: continue
 
-    #------------------------------------------------------------ 
-    # WRITE S AND T TIME SERIES DATA TO CSV FILE
-    #------------------------------------------------------------ 
-    #---- Storage Coefficient Output
-    twocols = np.column_stack( (t,S_array) )
-    with open(os.path.join('output',os.path.basename(prefix)+'_storativity.csv'), 'w') as f:
-        writer = csv.writer(f,delimiter=',')
-        writer.writerows(twocols)
-    #---- Transmissivity Output 
-    twocols = np.column_stack( (t,T_array) )
-    with open(os.path.join('output',os.path.basename(prefix)+'_transmissivity.csv'), 'w') as f:
-        writer = csv.writer(f,delimiter=',')
-        writer.writerows(twocols)
-    #---- Permeability Output 
-    # Calculate permeability (k) from T
-    k_array = []
-    for T in T_array: k_array.append(calc_perm(T,b=b))
-    twocols = np.column_stack( (t,k_array) )
-    with open(os.path.join('output',os.path.basename(prefix)+'_permeability.csv'), 'w') as f:
-        writer = csv.writer(f,delimiter=',')
-        writer.writerows(twocols)
+            ampl = ampl_data[i,1]
+            # Invert ampl so units are same as in Xue2016 (m/str)
+            ampl = 1/ampl
+            eta = eta_data[i,1]
 
-    #------------------------------------------------------------ 
-    # CALCULATE AVERAGE S AND T (AND k) VALUES
-    #------------------------------------------------------------ 
-    S_avg = np.mean(S_array)
-    T_avg = np.mean(T_array)
-    k_avg = np.mean(k_array)
-    tname ='output/avgProperties'
-    with open(tname, 'w') as f:
-        f.write('------------------------\n')
-        f.write('Average Properties:\n')
-        f.write('------------------------\n')
-        f.write('S_avg = {:.4e} [-]\n'.format(S_avg))
-        f.write('T_avg = {:.4e} [m2/s]\n'.format(T_avg))
-        f.write('k_avg = {:.4e} [m2]\n'.format(k_avg))
-    print()
-    os.system('cat '+tname)
+            print('Beginning differential evolution..')
+            # Set guess bounds for log(S) and log(T)
+            bnds = ( (-6, -1),       # log bounds for S
+                     (-8, -1), )     # log bounds for T
+            results = differential_evolution(optimize_SandT, bounds = bnds, args=(ampl, eta, tau, r_c, r_w, b), tol=1e-10, atol=1e-10)
+            best_S = 10**results.x[0]
+            best_T = 10**results.x[1]
+            # TEST
+            w = calc_w(tau)
+            E = calc_E(w,best_S,best_T, r_c, r_w)
+            F = calc_F(w,best_S,best_T, r_c, r_w)
+            A_test = (E**2 + F**2)**(-0.5)
+            A_error = (ampl - A_test)**2
+            A_g = calc_A(E,F)                   #calculate resulting amplitude response
+            eta_g = np.degrees(calc_eta( E,F )) #calculate resulting phase shift
+            #
+            print('\n\nFor the parameters:')
+            print('  Ampl. resp.: {} '.format(ampl))
+            print('  Phase shift: {}°'.format(eta))
+            print('----')
+            #  print('  A_guess    : {} '.format(A_g))
+            #  print('  eta_guess  : {}° '.format(eta_g))
+            print('--------------------------')
+            print('Total Error = {}'.format(results.fun))
+            print('after {} evaluations...'.format(results.nfev))
+            print('S        = {:.4e}      '.format(best_S))
+            print('T        = {:.4e} m^2/s'.format(best_T))
+            print('----')
+            #  # This only works for the first data point
+            #  print('From literature (eyeball estimate):')
+            #  print('S_actual ~ {:.4e}      '.format(2.34e-4))
+            #  print('T_actual ~ {:.4e} m^2/s'.format(4.30e-6))
 
-    #------------------------------------------------------------ 
-    # PLOT THE S AND T TIMESERIES 
-    #------------------------------------------------------------ 
-    fig, (ax1,ax2) = plt.subplots(2, figsize=(10, 6))
-    #---- T
-    ax1.scatter(t, T_array, marker='o',c='k')
-    ax1.set_ylabel(r'Transmissivity [m$^2$ s$^{-1}$]')
-    #---- k (on 2nd y-axis)
-    ax3 = ax1.twinx()
-    mn,mx = ax1.get_ylim()  #get ylim of T plot
-    # Don't need to re-plot, just convert the units
-    ax3.set_ylim(mn*calc_perm(1,b=b), mx*calc_perm(1,b=b))
-    ax3.set_ylabel(r'Permeability [m$^2$]', rotation=270,va='bottom')
-    #---- S
-    ax2.scatter(t, S_array, marker='o',c='k')
-    ax2.set_ylabel(r'Storage coefficient [—]')
-    ax2.set_xlabel('Date')
-    plt.tight_layout()
-    plt.savefig('output/hydrogeologicPropertiesPlot.pdf')
-    plt.savefig('output/hydrogeologicPropertiesPlot.png')
-    plt.close('all')
+
+            print('Differential evolution successful?')
+            print(results.success)
+            success_array.append(results.success)
+            #  #---------------------------------------- 
+            #  #---------------------------------------- 
+            #  # MINIMIZE FUNCTION
+            #  #---------------------------------------- 
+            #  # Try running optimize after differential evolution to fine-tune the guesses...
+            #  print()
+            #  print('Now beginning minimization...')
+            #  S_de = results.x[0]
+            #  T_de = results.x[1]
+            #  # new bounds for the minimize function
+            #  bnds = ( (-6, -4),
+                     #  (-8, -4), )
+            #  results = minimize(optimize_SandT, x0=(S_de,T_de), args=(ampl, user_eta, tau, r_c, r_w), bounds = bnds, tol=1e-20) #works well, fast
+            best_S = 10**results.x[0]
+            best_T = 10**results.x[1]
+            print('\nFor the parameters:')
+            print('  Ampl. resp.: {} '.format(ampl))
+            print('  Phase shift: {}°'.format(eta))
+            print('--------------------------')
+            print('Total Error = {}'.format(results.fun))
+            print('after {} evaluations...'.format(results.nfev))
+            print('S    = {:.4e}      '.format(best_S))
+            print('T    = {:.4e} m^2/s'.format(best_T))
+
+            t.append(ampl_data[i,0])
+            S_array.append(best_S)
+            T_array.append(best_T)
+
+        scount = 0
+        for s in success_array:
+            if s: scount+=1
+        print('success % = {:.3f}%'.format(scount/len(success_array)*100))
+        S_stdev = np.std(S_array)
+        print('st dev of S   = {}'.format(S_stdev))
+        print('min(S)  = {:e}'.format(min(S_array)))
+        print('max(S)  = {:e}'.format(max(S_array)))
+
+        #------------------------------------------------------------ 
+        # WRITE S AND T TIME SERIES DATA TO CSV FILE
+        #------------------------------------------------------------ 
+        #---- Storage Coefficient Output
+        twocols = np.column_stack( (t,S_array) )
+        with open(os.path.join('output',os.path.basename(prefix)+'_storativity.csv'), 'w', newline='') as f:
+            writer = csv.writer(f,delimiter=',')
+            writer.writerows(twocols)
+        #---- Transmissivity Output 
+        twocols = np.column_stack( (t,T_array) )
+        with open(os.path.join('output',os.path.basename(prefix)+'_transmissivity.csv'), 'w', newline='') as f:
+            writer = csv.writer(f,delimiter=',')
+            writer.writerows(twocols)
+        #---- Permeability Output 
+        # Calculate permeability (k) from T
+        k_array = []
+        for T in T_array: k_array.append(calc_perm(T,b=b))
+        twocols = np.column_stack( (t,k_array) )
+        with open(os.path.join('output',os.path.basename(prefix)+'_permeability.csv'), 'w', newline='') as f:
+            writer = csv.writer(f,delimiter=',')
+            writer.writerows(twocols)
+
+        #------------------------------------------------------------ 
+        # CALCULATE AVERAGE S AND T (AND k) VALUES
+        #------------------------------------------------------------ 
+        S_avg = np.mean(S_array)
+        T_avg = np.mean(T_array)
+        k_avg = np.mean(k_array)
+        tname = os.path.join('output','avgProperties')
+        with open(tname, 'w') as f:
+            f.write('------------------------\n')
+            f.write('Average Properties:\n')
+            f.write('------------------------\n')
+            f.write('S_avg = {:.4e} [-]\n'.format(S_avg))
+            f.write('T_avg = {:.4e} [m2/s]\n'.format(T_avg))
+            f.write('k_avg = {:.4e} [m2]\n'.format(k_avg))
+        print()
+        if 'win' in platform:
+            os.system('type '+tname)
+        else:
+            os.system('cat '+tname)  
+
+        #------------------------------------------------------------ 
+        # PLOT THE S AND T TIMESERIES 
+        #------------------------------------------------------------ 
+        tdate = [matlabSerial2python(ti) for ti in t]
+        fig, (ax1,ax2) = plt.subplots(2, figsize=(10, 6))
+        #---- T
+        ax1.scatter(tdate, T_array, marker='o',c='k')
+        ax1.set_ylabel(r'Transmissivity [m$^2$ s$^{-1}$]')
+        #---- k (on 2nd y-axis)
+        ax3 = ax1.twinx()
+        mn,mx = ax1.get_ylim()  #get ylim of T plot
+        # Don't need to re-plot, just convert the units
+        ax3.set_ylim(mn*calc_perm(1,b=b), mx*calc_perm(1,b=b))
+        ax3.set_ylabel(r'Permeability [m$^2$]', rotation=270,va='bottom')
+        #---- S
+        ax2.scatter(tdate, S_array, marker='o',c='k')
+        ax2.set_ylabel(r'Storage coefficient [—]')
+        ax2.set_xlabel('Date')
+        plt.tight_layout()
+        plt.savefig('output/hydrogeologicPropertiesPlot.pdf')
+        plt.savefig('output/hydrogeologicPropertiesPlot.png')
+        plt.close('all')
 
 
