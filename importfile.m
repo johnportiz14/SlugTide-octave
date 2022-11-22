@@ -4,7 +4,7 @@ function [Column1,Column2,Column3,Column4,Column5,Column6,Column7,Column8,Column
 delimiter = ',';
 if nargin<=2
     startRow = 1;
-    endRow = inf;
+    endRow = 1e9; %inf;
 end
 
 %% Format string for each line of text:
