@@ -13,8 +13,66 @@ Wellname=WellInitial.Wellname;
 nports=WellInitial.nports;
 tidename=WellInitial.tidename;
 dom=WellInitial.dom;
-noisestart1=WellInitial.noisestart1;
+noisestart1=WellInitial.noisestart1;   
 noiseend1=WellInitial.noiseend1;
+% [JPO] Add extra noise slots. Of not detected in InitiateWell.m, set to some arbitrary old date %%
+defaultNoiseDate_start = '1900-01-01 00:00:00'; %default start date for noise  %%
+defaultNoiseDate_end   = '1900-01-02 00:00:00'; %default end   date for noise  %%
+if isfield(WellInitial,'noisestart2'); noisestart2=WellInitial.noisestart2;    %%
+else noisestart2=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend2'); noiseend2=WellInitial.noiseend2;    %%
+else noiseend2=defaultNoiseDate_end; 
+end
+if isfield(WellInitial,'noisestart3'); noisestart3=WellInitial.noisestart3;    %%
+else noisestart3=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend3'); noiseend3=WellInitial.noiseend3;    %%
+else noiseend3=defaultNoiseDate_end; 
+end
+if isfield(WellInitial,'noisestart4'); noisestart4=WellInitial.noisestart4;    %%
+else noisestart4=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend4'); noiseend4=WellInitial.noiseend4;    %%
+else noiseend4=defaultNoiseDate_end; 
+end
+if isfield(WellInitial,'noisestart5'); noisestart5=WellInitial.noisestart5;    %%
+else noisestart5=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend5'); noiseend5=WellInitial.noiseend5;    %%
+else noiseend5=defaultNoiseDate_end; 
+end
+if isfield(WellInitial,'noisestart6'); noisestart6=WellInitial.noisestart6;    %%
+else noisestart6=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend6'); noiseend6=WellInitial.noiseend6;    %%
+else noiseend6=defaultNoiseDate_end; 
+end
+if isfield(WellInitial,'noisestart7'); noisestart7=WellInitial.noisestart7;    %%
+else noisestart7=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend7'); noiseend7=WellInitial.noiseend7;    %%
+else noiseend7=defaultNoiseDate_end; 
+end
+if isfield(WellInitial,'noisestart8'); noisestart8=WellInitial.noisestart8;    %%
+else noisestart8=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend8'); noiseend8=WellInitial.noiseend8;    %%
+else noiseend8=defaultNoiseDate_end; 
+end
+if isfield(WellInitial,'noisestart9'); noisestart9=WellInitial.noisestart9;    %%
+else noisestart9=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend9'); noiseend9=WellInitial.noiseend9;    %%
+else noiseend9=defaultNoiseDate_end; 
+end
+
+
+
+
+% noisestart2=WellInitial.noisestart2;                %%
+% noiseend2=WellInitial.noiseend2;                    %%
+
 if (nports>1)
 dom_1=WellInitial.dom_1;
 dom_2=WellInitial.dom_2;
@@ -53,7 +111,7 @@ if format=='S' % simple format
 
             for i=1:Npoints,            % convert data from cell to double
                 btime=atime(i);
-                ctime=btime{1};
+                ctime=btime{1};  %curly braces make a cell array
                 dtime(i)=str2double(ctime);
 
                 bdata=adata(i);
@@ -70,10 +128,12 @@ if format=='S' % simple format
             Well.time=dtime;
             Well.WL=ddata;
 
-        %     % if WL contains NaN (missing data from original file)   
-        %     indiceNaN = isnan(Well.WL);
-        %     Well.WL = Well.WL(indiceNaN~=1);
-        %     Well.time = Well.time(indiceNaN~=1);
+% %         % [JPO] 10/27/2022 (the below NaN stuff was commented out...)
+            % if WL contains NaN (missing data from original file)   
+            indiceNaN = isnan(Well.WL);
+            Well.WL = Well.WL(indiceNaN~=1);
+            Well.time = Well.time(indiceNaN~=1);
+%             %%%%%
 
             Well.num_ports=nports;
 
@@ -89,8 +149,8 @@ if format=='S' % simple format
             % to account for differences within original data
             xi=Well.tUTC(1):Well.dt:Well.tUTC(end);
 
-
-            yi=interp1(Well.tUTC,ddata,xi);
+%             yi=interp1(Well.tUTC,ddata,xi);     %ORIGINAL
+            yi=interp1(Well.tUTC,Well.WL,xi);     %[JPO] Well.WL is same as ddata but with nans removed
 
             Well.xi=xi; % interpolated time
             Well.yi=yi; % interpolated data
@@ -103,7 +163,16 @@ if format=='S' % simple format
 
             % define periods that will be eliminated in processing due to noise
             % first column is beginning of period; second is end
-            Well.noise=[datenum(noisestart1) datenum(noiseend1)];
+%             Well.noise=[datenum(noisestart1) datenum(noiseend1)];  %<-- ORIGINAL
+            Well.noise=[datenum(noisestart1) datenum(noiseend1)     %%
+                        datenum(noisestart2) datenum(noiseend2)     %%
+                        datenum(noisestart3) datenum(noiseend3)     %%
+                        datenum(noisestart4) datenum(noiseend4)     %%
+                        datenum(noisestart5) datenum(noiseend5)     %%
+                        datenum(noisestart6) datenum(noiseend6)     %%
+                        datenum(noisestart7) datenum(noiseend7)     %%
+                        datenum(noisestart8) datenum(noiseend8)     %%
+                        datenum(noisestart9) datenum(noiseend9)];  %<-- [JPO] NEW 1/1/2022
 
             Well.dom=dom;
 
@@ -138,9 +207,9 @@ elseif format=='A'
             Well.WL=ddata;
 
         %     % if WL contains NaN (missing data from original file)   
-        %     indiceNaN = isnan(Well.WL);
-        %     Well.WL = Well.WL(indiceNaN~=1);
-        %     Well.time = Well.time(indiceNaN~=1);
+            indiceNaN = isnan(Well.WL);
+            Well.WL = Well.WL(indiceNaN~=1);
+            Well.time = Well.time(indiceNaN~=1);
 
             Well.num_ports=nports;
 
@@ -155,7 +224,8 @@ elseif format=='A'
             %interpolate data to preferred time interval (match data dt); change interval as necessary
             % to account for differences within original data
             xi=Well.tUTC(1):Well.dt:Well.tUTC(end);
-            yi=interp1(Well.tUTC,ddata,xi);
+%             yi=interp1(Well.tUTC,ddata,xi);     %ORIGINAL
+            yi=interp1(Well.tUTC,Well.WL,xi);     %[JPO] Well.WL is same as ddata but with nans removed
 
             Well.xi=xi; % interpolated time
             Well.yi=yi; % interpolated data
@@ -230,7 +300,7 @@ elseif format=='B'
                     ddata_8(i)=str2double(cdata_8);
 
                 end
-                date0=datenum('1899-12-30');
+                date0=datenum('1899-12-30');   
                 dtime=dtime+date0; % correct difference in serial reference dates between Excel and MATLAB
 
             %     %If repeated times in data
@@ -258,6 +328,19 @@ elseif format=='B'
                 Well.WL{7}=ddata_7;
                 Well.WL{8}=ddata_8;
 
+    % %         % [JPO] 10/27/2022 
+                % if WL contains NaN (missing data from original file)   
+                indiceNaN = isnan(Well.WL);
+                Well.WL{1} = Well.WL{1}(indiceNaN~=1);
+                Well.WL{2} = Well.WL{2}(indiceNaN~=1);
+                Well.WL{3} = Well.WL{3}(indiceNaN~=1);
+                Well.WL{4} = Well.WL{4}(indiceNaN~=1);
+                Well.WL{5} = Well.WL{5}(indiceNaN~=1);
+                Well.WL{6} = Well.WL{6}(indiceNaN~=1);
+                Well.WL{7} = Well.WL{7}(indiceNaN~=1);
+                Well.WL{8} = Well.WL{8}(indiceNaN~=1);
+                Well.time = Well.time(indiceNaN~=1);
+        %       %%%%%
 
                 Well.num_ports=nports;
 
@@ -272,14 +355,23 @@ elseif format=='B'
                 %interpolate data to preferred time interval (match data dt); change interval as necessary
                 % to account for differences within original data
                 xi=Well.tUTC(1):Well.dt:Well.tUTC(end);
-                yi{1}=interp1(Well.tUTC,ddata_1,xi);
-                yi{2}=interp1(Well.tUTC,ddata_2,xi);
-                yi{3}=interp1(Well.tUTC,ddata_3,xi);
-                yi{4}=interp1(Well.tUTC,ddata_4,xi);
-                yi{5}=interp1(Well.tUTC,ddata_5,xi);
-                yi{6}=interp1(Well.tUTC,ddata_6,xi);
-                yi{7}=interp1(Well.tUTC,ddata_7,xi);
-                yi{8}=interp1(Well.tUTC,ddata_8,xi);
+%                 yi{1}=interp1(Well.tUTC,ddata_1,xi);
+%                 yi{2}=interp1(Well.tUTC,ddata_2,xi);
+%                 yi{3}=interp1(Well.tUTC,ddata_3,xi);
+%                 yi{4}=interp1(Well.tUTC,ddata_4,xi);
+%                 yi{5}=interp1(Well.tUTC,ddata_5,xi);
+%                 yi{6}=interp1(Well.tUTC,ddata_6,xi);
+%                 yi{7}=interp1(Well.tUTC,ddata_7,xi);
+%                 yi{8}=interp1(Well.tUTC,ddata_8,xi);
+                %%[JPO] changed to allow NaN handling
+                yi{1}=interp1(Well.tUTC,Well.WL{1},xi);
+                yi{2}=interp1(Well.tUTC,Well.WL{2},xi);
+                yi{3}=interp1(Well.tUTC,Well.WL{3},xi);
+                yi{4}=interp1(Well.tUTC,Well.WL{4},xi);
+                yi{5}=interp1(Well.tUTC,Well.WL{5},xi);
+                yi{6}=interp1(Well.tUTC,Well.WL{6},xi);
+                yi{7}=interp1(Well.tUTC,Well.WL{7},xi);
+                yi{8}=interp1(Well.tUTC,Well.WL{8},xi);
 
                 Well.xi=xi; % interpolated time
                 Well.yi{1}=yi{1}; % interpolated data
@@ -333,9 +425,10 @@ elseif format=='S' % simple format
             Well.WL=ddata;
 
         %     % if WL contains NaN (missing data from original file)   
-        %     indiceNaN = isnan(Well.WL);
-        %     Well.WL = Well.WL(indiceNaN~=1);
-        %     Well.time = Well.time(indiceNaN~=1);
+            indiceNaN = isnan(Well.WL);
+            Well.WL = Well.WL(indiceNaN~=1);
+            Well.time = Well.time(indiceNaN~=1);
+        %   %%%%%%%%%%%%%
 
             Well.num_ports=nports;
 
@@ -352,7 +445,8 @@ elseif format=='S' % simple format
             xi=Well.tUTC(1):Well.dt:Well.tUTC(end);
 
 
-            yi=interp1(Well.tUTC,ddata,xi);
+%             yi=interp1(Well.tUTC,ddata,xi);     %ORIGINAL
+            yi=interp1(Well.tUTC,Well.WL,xi);     %[JPO] Well.WL is same as ddata but with nans removed
 
             Well.xi=xi; % interpolated time
             Well.yi=yi; % interpolated data
