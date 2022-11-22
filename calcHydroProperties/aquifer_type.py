@@ -36,9 +36,8 @@ import ast
 #MATPLOTLIBRC PLOTTING PARAMETERS
 # Load up sansmath so that math --> helvetica font
 # Also need to tell tex to turn on sansmath package
-plt.rcParams['text.latex.preamble'] = [
-    r'\usepackage{sansmath}',
-    r'\sansmath']
+plt.rcParams['text.latex.preamble'] = r'\usepackage{sansmath}'#,
+#    r'\sansmath']
 plt.rcParams['font.family'] = 'sans-serif'
 plt.rcParams['font.sans-serif'] = 'Helvetica'
 plt.rcParams['axes.labelweight']=u'normal'
@@ -174,7 +173,7 @@ if __name__== "__main__":
     #--------------------------------------------------------------
     # Skip the 'all' plot if only a single well run using commandline argument
 
-    if len(sys.argv)==1:
+    if (len(sys.argv)==1)&(len(wellList)>1):
         numplots = len(wellList)
         #  fig, (ax1,ax2) = plt.subplots(numplots) #, figsize=(10, 6))
         #  fig, axs = plt.subplots(numplots) #, figsize=(10, 6))
