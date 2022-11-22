@@ -334,6 +334,9 @@ if __name__== "__main__":
     if not os.path.exists(os.path.join(os.getcwd(),'output')):
         os.makedirs('output')
 
+		# Detect user operating system
+    platform = sys.platform; platform = platform.lower()
+
     #--------------------------------------------------------------
     #  CALCULATE HYDROGEOLOGIC PROPERTIES FOR EACH WELL
     #--------------------------------------------------------------
@@ -442,12 +445,12 @@ if __name__== "__main__":
         #------------------------------------------------------------ 
         #---- Storage Coefficient Output
         twocols = np.column_stack( (t,S_array) )
-        with open(os.path.join('output',os.path.basename(prefix)+'_storativity.csv'), 'w') as f:
+        with open(os.path.join('output',os.path.basename(prefix)+'_storativity.csv'), 'w', newline='') as f:
             writer = csv.writer(f,delimiter=',')
             writer.writerows(twocols)
         #---- Transmissivity Output 
         twocols = np.column_stack( (t,T_array) )
-        with open(os.path.join('output',os.path.basename(prefix)+'_transmissivity.csv'), 'w') as f:
+        with open(os.path.join('output',os.path.basename(prefix)+'_transmissivity.csv'), 'w', newline='') as f:
             writer = csv.writer(f,delimiter=',')
             writer.writerows(twocols)
         #---- Permeability Output 
@@ -455,12 +458,12 @@ if __name__== "__main__":
         k_array = []
         for T in T_array: k_array.append(calc_perm(T,b=b))
         twocols = np.column_stack( (t,k_array) )
-        with open(os.path.join('output',os.path.basename(prefix)+'_permeability.csv'), 'w') as f:
+        with open(os.path.join('output',os.path.basename(prefix)+'_permeability.csv'), 'w', newline='') as f:
             writer = csv.writer(f,delimiter=',')
             writer.writerows(twocols)
         #---- Optimization Errors (total error) 
         twocols = np.column_stack( (t,err_array) )
-        with open(os.path.join('output',os.path.basename(prefix)+'_error.csv'), 'w') as f:
+        with open(os.path.join('output',os.path.basename(prefix)+'_error.csv'), 'w', newline='') as f:
             writer = csv.writer(f,delimiter=',')
             writer.writerows(twocols)
 
@@ -472,7 +475,7 @@ if __name__== "__main__":
         T_avg = np.mean(T_array)
         k_avg = np.mean(k_array)
         K_avg = (np.mean(k_array)*rho_water*g)/mu
-        tname ='output/avgProperties_{}'.format(os.path.basename(prefix))
+        tname = os.path.join('output','avgProperties_{}'.format(os.path.basename(prefix)))
         with open(tname, 'w') as f:
             f.write('------------------------\n')
             f.write('Average Properties ({}):\n'.format(os.path.basename(prefix)))
@@ -485,7 +488,10 @@ if __name__== "__main__":
             #  f.write('D_avg   = {:.4e} [m2/s]\n'.format(T_avg/S_avg))
             #  f.write('R_avg   = {:.2f} [m]\n'.format(np.sqrt(T_avg/S_avg*tau)))
         print()
-        os.system('cat '+tname)
+        if 'win' in platform:
+            os.system('type '+tname)
+        else:
+            os.system('cat '+tname)      	
 
         #------------------------------------------------------------ 
         # PLOT THE S AND T TIMESERIES 
@@ -521,7 +527,7 @@ if __name__== "__main__":
 
 
     # Skip the 'all' plot if only a single well run using commandline argument
-    if len(sys.argv)==1:
+    if len(sys.argv)>1:
         #---------------------------------------------
         # PLOT T AND S FOR ALL WELLS ON SINGLE PLOT 
         #---------------------------------------------
@@ -555,7 +561,7 @@ if __name__== "__main__":
             #  ax2.scatter(tdate, S_s_array, marker='o')
         #Plot Properties
         ax1.legend()
-        ax1.title('All Wells')
+        ax1.set_title('All Wells')
         ax2.set_yscale('log')
         ax3.set_yscale('log')
         ax1.set_ylabel(r'Transmissivity [m$^2$/s]')
