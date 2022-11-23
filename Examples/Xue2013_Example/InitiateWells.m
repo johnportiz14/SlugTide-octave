@@ -4,7 +4,7 @@
 
 %Only 1 well (WFSD-1)
 iWell=1;
-        WellInitial(iWell).filename='waterlevel_preprocessed_hackfix_SERIAL.csv';%'waterlevel_preprocessed_hackfix-abridged.csv';%'waterlevel_preprocessed_hackfix.csv'; % name of data file for Well 1
+        WellInitial(iWell).filename='data/processed/waterlevel_preprocessed_hackfix_SERIAL.csv';%'waterlevel_preprocessed_hackfix-abridged.csv';%'waterlevel_preprocessed_hackfix.csv'; % name of data file for Well 1
         WellInitial(iWell).Wellname='Well_WFSD-1'; % name of Well 1
         WellInitial(iWell).format='S'; % format code for Well 1
         WellInitial(iWell).startrow=152;%610000;%152; % (for some reason, doesn't seem to like a startrow of 1 or 2) start row of data to be analyzed from csv file

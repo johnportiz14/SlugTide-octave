@@ -13,11 +13,17 @@ Wellname=WellInitial.Wellname;
 nports=WellInitial.nports;
 tidename=WellInitial.tidename;
 dom=WellInitial.dom;
-noisestart1=WellInitial.noisestart1;   
-noiseend1=WellInitial.noiseend1;
-% [JPO] Add extra noise slots. Of not detected in InitiateWell.m, set to some arbitrary old date %%
+% noisestart1=WellInitial.noisestart1;          [JPO]
+% noiseend1=WellInitial.noiseend1;              [JPO]                          %%      
+% [JPO] Add extra noise slots. If not detected in InitiateWell.m, sets to some arbitrary old date %%
 defaultNoiseDate_start = '1900-01-01 00:00:00'; %default start date for noise  %%
 defaultNoiseDate_end   = '1900-01-02 00:00:00'; %default end   date for noise  %%
+if isfield(WellInitial,'noisestart1'); noisestart1=WellInitial.noisestart1;    %%
+else noisestart1=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend1'); noiseend1=WellInitial.noiseend1;    %%
+else noiseend1=defaultNoiseDate_end; 
+end
 if isfield(WellInitial,'noisestart2'); noisestart2=WellInitial.noisestart2;    %%
 else noisestart2=defaultNoiseDate_start; 
 end
@@ -66,7 +72,12 @@ end
 if isfield(WellInitial,'noiseend9'); noiseend9=WellInitial.noiseend9;    %%
 else noiseend9=defaultNoiseDate_end; 
 end
-
+if isfield(WellInitial,'noisestart10'); noisestart10=WellInitial.noisestart10;    %%
+else noisestart10=defaultNoiseDate_start; 
+end
+if isfield(WellInitial,'noiseend10'); noiseend10=WellInitial.noiseend10;    %%
+else noiseend10=defaultNoiseDate_end; 
+end
 
 
 
@@ -74,26 +85,32 @@ end
 % noiseend2=WellInitial.noiseend2;                    %%
 
 if (nports>1)
-dom_1=WellInitial.dom_1;
-dom_2=WellInitial.dom_2;
-dom_3=WellInitial.dom_3;
-dom_4=WellInitial.dom_4;
-dom_5=WellInitial.dom_5;
-dom_6=WellInitial.dom_6;
-dom_7=WellInitial.dom_7;
-dom_8=WellInitial.dom_8;
 noisestart_1=WellInitial.noisestart_1;
 noiseend_1=WellInitial.noiseend_1;
 noisestart_2=WellInitial.noisestart_2;
 noiseend_2=WellInitial.noiseend_2;
-noisestart_3=WellInitial.noisestart_3;
-noiseend_3=WellInitial.noiseend_3;
-noisestart_4=WellInitial.noisestart_4;
-noiseend_4=WellInitial.noiseend_4;
+noisestart_3_1=WellInitial.noisestart_3_1;                              %%
+noiseend_3_1=WellInitial.noiseend_3_1;                                  %%
+noisestart_3_2=WellInitial.noisestart_3_2;                              %%
+noiseend_3_2=WellInitial.noiseend_3_2;                                  %%
+noisestart_3_3=WellInitial.noisestart_3_3;                              %%
+noiseend_3_3=WellInitial.noiseend_3_3;                                  %%
+noisestart_3_4=WellInitial.noisestart_3_4;                              %%
+noiseend_3_4=WellInitial.noiseend_3_4;                                  %%
+noisestart_3_5=WellInitial.noisestart_3_5;                              %%
+noiseend_3_5=WellInitial.noiseend_3_5;                                  %%
+noisestart_4_1=WellInitial.noisestart_4_1;                              %%
+noiseend_4_1=WellInitial.noiseend_4_1;                                  %%
+noisestart_4_2=WellInitial.noisestart_4_2;                              %%
+noiseend_4_2=WellInitial.noiseend_4_2;                                  %%
 noisestart_5=WellInitial.noisestart_5;
 noiseend_5=WellInitial.noiseend_5;
-noisestart_6=WellInitial.noisestart_6;
-noiseend_6=WellInitial.noiseend_6;
+noisestart_6_1=WellInitial.noisestart_6_1;                              %%
+noiseend_6_1=WellInitial.noiseend_6_1;                                  %%
+noisestart_6_2=WellInitial.noisestart_6_2;                              %%
+noiseend_6_2=WellInitial.noiseend_6_2;                                  %%
+noisestart_6_3=WellInitial.noisestart_6_3;                              %%
+noiseend_6_3=WellInitial.noiseend_6_3;                                  %%
 noisestart_7=WellInitial.noisestart_7;
 noiseend_7=WellInitial.noiseend_7;
 noisestart_8=WellInitial.noisestart_8;
@@ -172,7 +189,8 @@ if format=='S' % simple format
                         datenum(noisestart6) datenum(noiseend6)     %%
                         datenum(noisestart7) datenum(noiseend7)     %%
                         datenum(noisestart8) datenum(noiseend8)     %%
-                        datenum(noisestart9) datenum(noiseend9)];  %<-- [JPO] NEW 1/1/2022
+                        datenum(noisestart9) datenum(noiseend9)     %%
+                        datenum(noisestart10) datenum(noiseend10)]; %<-- [JPO] NEW 1/1/2022
 
             Well.dom=dom;
 

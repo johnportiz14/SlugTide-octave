@@ -17,59 +17,101 @@ Well(iWell).Ph(ff)=Well(iWell).Ph(ff)-360;
 
 
 UserParam;
-% EQ_t=datenum(EQtime)+cUTC; %%%%UTC %%%% EQ
-% t_pre=EQ_t-t_win/2; %%%% EQ
-% t_post=EQ_t+t_win/2; %%%% EQ
-% kk=1:length(Well(iWell).T); % EQ
-% mm=find(Well(iWell).T(kk)>t_pre & Well(iWell).T(kk)<t_post); %%%% EQ
-% Well(iWell).Ph(mm)=NaN; %%%% EQ
-% Well(iWell).A(mm)=NaN; %%%% EQ
-% Well(iWell).s=1./(Well(iWell).A); %%%% EQ
-% 
-% Well(iWell).jj1=find(Well(iWell).T(kk)>t_pre-30 & Well(iWell).T(kk)<t_pre); %%%% EQ
-% Well(iWell).pre_pha=nanmean(Well(iWell).Ph(Well(iWell).jj1)); %%%% EQ
-% Well(iWell).pre_amp=nanmean(Well(iWell).s(Well(iWell).jj1)); %%%% EQ
-% Well(iWell).jj2a=find(Well(iWell).T(kk)>t_post & Well(iWell).T(kk)<t_post+30); %%%% EQ
-% Well(iWell).post_pha=nanmean(Well(iWell).Ph(Well(iWell).jj2)); %%%% EQ
-% Well(iWell).post_amp=nanmean(Well(iWell).s(Well(iWell).jj2)); %%%% EQ
-% 
-% Well(iWell).pha_change=Well(iWell).post_pha-Well(iWell).pre_pha; %%%% EQ
-% Well(iWell).amp_change=Well(iWell).post_amp-Well(iWell).pre_amp; %%%% EQ
-% 
-% Well(iWell).jj3=find(Well(iWell).T(kk)<t_pre); %%%% EQ
-% Well(iWell).background_pha=nanstd(Well(iWell).Ph(Well(iWell).jj3)); %%%% EQ
-% Well(iWell).background_amp=nanstd(Well(iWell).s(Well(iWell).jj3));  %%%% EQ
 
-% ref(iWell) = Well(iWell).date1; %%%% EQ
-%Well(iWell).t=Well(iWell).T-ref(iWell); %%%% EQ
-% epi(iWell)=EQ_t-ref(iWell); %%%% EQ
-
-
-
+% Start plotting
 figure;clf;hold on
 subplot('position',[0.15,0.6,0.7,0.25])
 
+%AMPLITUDE RESPONSE
 plot(Well(iWell).T,1./Well(iWell).A,'.','MarkerSize',6)
+
+
 hold on;
 title(Well(iWell).name);
-% plot([EQ_t EQ_t],[nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2],'r--','LineWidth',0.5);hold on %%%% EQ
-% plot(Well(iWell).T(Well(iWell).jj1),Well(iWell).s(Well(iWell).jj1),'r.','MarkerSize',6) %%%% EQ
-% plot(Well(iWell).T(Well(iWell).jj2),Well(iWell).s(Well(iWell).jj2),'r.','MarkerSize',6) %%%% EQ
-%xlim([0 Well(iWell).t(end)+t_win/2]);
-% xlim([datenum('PlotTime3') datenum('PlotTime4')])
-% ylim([nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2])
-ylabel('Amplitude (1/m)');
-datetick('KeepLimits')
-hold off;
 
-subplot('position',[0.15,0.28,0.7,0.25])
-plot(Well(iWell).T,Well(iWell).Ph,'.','MarkerSize',6);
-hold on;
-% plot([EQ_t EQ_t],[-10 10]+nanmean(Well(iWell).Ph),'r--','LineWidth',0.5);hold on %%%% EQ
-% plot(Well(iWell).T(Well(iWell).jj1),Well(iWell).Ph(Well(iWell).jj1),'r.','MarkerSize',6) %%%% EQ
-% plot(Well(iWell).T(Well(iWell).jj2),Well(iWell).Ph(Well(iWell).jj2),'r.','MarkerSize',6) %%%% EQ
-ylabel('Phase (degree)')
-hold on
+% % %%%%[JPO] loop through EQs (if present)
+if exist("EQtime","var")
+    for j=1:size(EQtime,1)
+        EQ_t=datenum(EQtime(j,:))+cUTC; %%%%UTC %%%% EQ
+        t_pre=EQ_t-t_win/2; %%%% EQ
+        t_post=EQ_t+t_win/2; %%%% EQ
+        kk=1:length(Well(iWell).T); % EQ
+        mm=find(Well(iWell).T(kk)>t_pre & Well(iWell).T(kk)<t_post); %%%% EQ
+        Well(iWell).Ph(mm)=NaN; %%%% EQ
+        Well(iWell).A(mm)=NaN; %%%% EQ
+        Well(iWell).s=1./(Well(iWell).A); %%%% EQ
+        Well(iWell).jj1=find(Well(iWell).T(kk)>t_pre-30 & Well(iWell).T(kk)<t_pre); %%%% EQ
+        Well(iWell).pre_pha=nanmean(Well(iWell).Ph(Well(iWell).jj1)); %%%% EQ
+        Well(iWell).pre_amp=nanmean(Well(iWell).s(Well(iWell).jj1)); %%%% EQ
+        Well(iWell).jj2=find(Well(iWell).T(kk)>t_post & Well(iWell).T(kk)<t_post+30); %%%% EQ
+        Well(iWell).post_pha=nanmean(Well(iWell).Ph(Well(iWell).jj2)); %%%% EQ
+        Well(iWell).post_amp=nanmean(Well(iWell).s(Well(iWell).jj2)); %%%% EQ
+        Well(iWell).pha_change=Well(iWell).post_pha-Well(iWell).pre_pha; %%%% EQ
+        Well(iWell).amp_change=Well(iWell).post_amp-Well(iWell).pre_amp; %%%% EQ
+        Well(iWell).jj3=find(Well(iWell).T(kk)<t_pre); %%%% EQ
+        Well(iWell).background_pha=nanstd(Well(iWell).Ph(Well(iWell).jj3)); %%%% EQ
+        Well(iWell).background_amp=nanstd(Well(iWell).s(Well(iWell).jj3));  %%%% EQ
+        ref(iWell) = Well(iWell).date1; %%%% EQ
+        Well(iWell).t=Well(iWell).T-ref(iWell); %%%% EQ
+        epi(iWell)=EQ_t-ref(iWell); %%%% EQ
+    
+        plot([EQ_t EQ_t],[nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2],'r--','LineWidth',0.5);hold on %%%% EQ
+        plot(Well(iWell).T(Well(iWell).jj1),Well(iWell).s(Well(iWell).jj1),'r.','MarkerSize',6) %%%% EQ
+        plot(Well(iWell).T(Well(iWell).jj2),Well(iWell).s(Well(iWell).jj2),'r.','MarkerSize',6) %%%% EQ
+    end
+end
+    %xlim([0 Well(iWell).t(end)+t_win/2]);
+    % xlim([datenum('PlotTime3') datenum('PlotTime4')])
+    % ylim([nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2])
+    ylabel('Amplitude (1/m)');
+    datetick('KeepLimits')
+    hold off;
+
+    %PHASE LAG
+    subplot('position',[0.15,0.28,0.7,0.25])
+    plot(Well(iWell).T,Well(iWell).Ph,'.','MarkerSize',6);
+    % add a zero-line if appropriate
+    xl = get(gca,'XLim');
+    yl = get(gca,'YLim');
+    if (yl(2)>=0 && yl(1)<=0)
+        hold on;
+        graycolor = [0.7 0.7 0.7];
+        plot(xl, [0 0], '--', 'Color', graycolor,'LineWidth',1);
+        hold on;
+    end
+    ylabel('Phase (degree)')
+    hold on;
+% % %%%%[JPO] loop through EQs (if exist)
+if exist("EQtime","var")
+    for j=1:size(EQtime,1)
+        EQ_t=datenum(EQtime(j,:))+cUTC; %%%%UTC %%%% EQ
+        t_pre=EQ_t-t_win/2; %%%% EQ
+        t_post=EQ_t+t_win/2; %%%% EQ
+        kk=1:length(Well(iWell).T); % EQ
+        mm=find(Well(iWell).T(kk)>t_pre & Well(iWell).T(kk)<t_post); %%%% EQ
+        Well(iWell).Ph(mm)=NaN; %%%% EQ
+        Well(iWell).A(mm)=NaN; %%%% EQ
+        Well(iWell).s=1./(Well(iWell).A); %%%% EQ
+        Well(iWell).jj1=find(Well(iWell).T(kk)>t_pre-30 & Well(iWell).T(kk)<t_pre); %%%% EQ
+        Well(iWell).pre_pha=nanmean(Well(iWell).Ph(Well(iWell).jj1)); %%%% EQ
+        Well(iWell).pre_amp=nanmean(Well(iWell).s(Well(iWell).jj1)); %%%% EQ
+        Well(iWell).jj2=find(Well(iWell).T(kk)>t_post & Well(iWell).T(kk)<t_post+30); %%%% EQ
+        Well(iWell).post_pha=nanmean(Well(iWell).Ph(Well(iWell).jj2)); %%%% EQ
+        Well(iWell).post_amp=nanmean(Well(iWell).s(Well(iWell).jj2)); %%%% EQ
+        Well(iWell).pha_change=Well(iWell).post_pha-Well(iWell).pre_pha; %%%% EQ
+        Well(iWell).amp_change=Well(iWell).post_amp-Well(iWell).pre_amp; %%%% EQ
+        Well(iWell).jj3=find(Well(iWell).T(kk)<t_pre); %%%% EQ
+        Well(iWell).background_pha=nanstd(Well(iWell).Ph(Well(iWell).jj3)); %%%% EQ
+        Well(iWell).background_amp=nanstd(Well(iWell).s(Well(iWell).jj3));  %%%% EQ
+        ref(iWell) = Well(iWell).date1; %%%% EQ
+        Well(iWell).t=Well(iWell).T-ref(iWell); %%%% EQ
+        epi(iWell)=EQ_t-ref(iWell); %%%% EQ
+        plot([EQ_t EQ_t],[-10 10]+nanmean(Well(iWell).Ph),'r--','LineWidth',0.5);hold on %%%% EQ
+        plot(Well(iWell).T(Well(iWell).jj1),Well(iWell).Ph(Well(iWell).jj1),'r.','MarkerSize',6) %%%% EQ
+        plot(Well(iWell).T(Well(iWell).jj2),Well(iWell).Ph(Well(iWell).jj2),'r.','MarkerSize',6) %%%% EQ
+        hold on
+    end
+end
 % xlim([datenum('PlotTime3') datenum('PlotTime4')])
 datetick('KeepLimits')
 % ylim([-10 10]+nanmean(Well(iWell).Ph))
@@ -79,12 +121,20 @@ datetick('KeepLimits')
 print(gcf,'-dpdf',strcat(Well(iWell).name,'_',num2str(i),'_amp_pha.pdf'))
 print(gcf,'-dpng',strcat(Well(iWell).name,'_',num2str(i),'_amp_pha.png'))
 
+%[JPO] Write amplitude response and phase shift values to .csv
+filename = strcat(Well(iWell).name,'_',num2str(i),'_amp.csv');
+twocol = [ Well(iWell).T, 1./Well(iWell).A ];
+dlmwrite(filename,twocol,'precision',20);  % csvwrite() cuts off the decimal precision
+filename = strcat(Well(iWell).name,'_',num2str(i),'_pha.csv');
+twocol = [ Well(iWell).T, Well(iWell).Ph ];
+dlmwrite(filename,twocol,'precision',20);
+
 % end
 
 end
 
 
-
+%% IF THERE ARE MULTIPLE PORTS  [JPO] (I have not edited this section)
     else
 
         for i=1:Nports
@@ -95,33 +145,42 @@ ff=find(Well(iWell).Ph>180);
 Well(iWell).Ph(ff)=Well(iWell).Ph(ff)-360;
 
 UserParam;
-% EQ_t=datenum(EQtime)+cUTC; %%%%UTC  %%%% EQ
-% t_pre=EQ_t-t_win/2; %%%% EQ
-% t_post=EQ_t+t_win/2; %%%% EQ
-% kk=1:length(Well(iWell).T); %%%% EQ
-% mm=find(Well(iWell).T(kk)>t_pre & Well(iWell).T(kk)<t_post); %%%% EQ
-% Well(iWell).Ph(mm)=NaN; %%%% EQ
-% Well(iWell).A(mm)=NaN; %%%% EQ
-% Well(iWell).s=1./(Well(iWell).A); %%%% EQ
-% 
-% Well(iWell).jj1=find(Well(iWell).T(kk)>t_pre-30 & Well(iWell).T(kk)<t_pre); %%%% EQ
-% Well(iWell).pre_pha=nanmean(Well(iWell).Ph(Well(iWell).jj1)); %%%% EQ
-% Well(iWell).pre_amp=nanmean(Well(iWell).s(Well(iWell).jj1)); %%%% EQ
-% Well(iWell).jj2=find(Well(iWell).T(kk)>t_post & Well(iWell).T(kk)<t_post+30); %%%% EQ
-% Well(iWell).post_pha=nanmean(Well(iWell).Ph(Well(iWell).jj2)); %%%% EQ
-% Well(iWell).post_amp=nanmean(Well(iWell).s(Well(iWell).jj2)); %%%% EQ
-% 
-% Well(iWell).pha_change=Well(iWell).post_pha-Well(iWell).pre_pha; %%%% EQ
-% Well(iWell).amp_change=Well(iWell).post_amp-Well(iWell).pre_amp; %%%% EQ
-% 
-% Well(iWell).jj3=find(Well(iWell).T(kk)<t_pre); %%%% EQ
-% Well(iWell).background_pha=nanstd(Well(iWell).Ph(Well(iWell).jj3)); %%%% EQ
-% Well(iWell).background_amp=nanstd(Well(iWell).s(Well(iWell).jj3)); %%%% EQ
+if exist("EQtime","var")
+    for j=1:size(EQtime,1)
+%         EQ_t=datenum(EQtime)+cUTC; %%%%UTC  %%%% EQ
+        EQ_t=datenum(EQtime(j,:))+cUTC; %%%%UTC %%%% EQ
+        t_pre=EQ_t-t_win/2; %%%% EQ
+        t_post=EQ_t+t_win/2; %%%% EQ
+        kk=1:length(Well(iWell).T); %%%% EQ
+        mm=find(Well(iWell).T(kk)>t_pre & Well(iWell).T(kk)<t_post); %%%% EQ
+        Well(iWell).Ph(mm)=NaN; %%%% EQ
+        Well(iWell).A(mm)=NaN; %%%% EQ
+        Well(iWell).s=1./(Well(iWell).A); %%%% EQ
+        
+        Well(iWell).jj1=find(Well(iWell).T(kk)>t_pre-30 & Well(iWell).T(kk)<t_pre); %%%% EQ
+        Well(iWell).pre_pha=nanmean(Well(iWell).Ph(Well(iWell).jj1)); %%%% EQ
+        Well(iWell).pre_amp=nanmean(Well(iWell).s(Well(iWell).jj1)); %%%% EQ
+        Well(iWell).jj2=find(Well(iWell).T(kk)>t_post & Well(iWell).T(kk)<t_post+30); %%%% EQ
+        Well(iWell).post_pha=nanmean(Well(iWell).Ph(Well(iWell).jj2)); %%%% EQ
+        Well(iWell).post_amp=nanmean(Well(iWell).s(Well(iWell).jj2)); %%%% EQ
+        
+        Well(iWell).pha_change=Well(iWell).post_pha-Well(iWell).pre_pha; %%%% EQ
+        Well(iWell).amp_change=Well(iWell).post_amp-Well(iWell).pre_amp; %%%% EQ
+        
+        Well(iWell).jj3=find(Well(iWell).T(kk)<t_pre); %%%% EQ
+        Well(iWell).background_pha=nanstd(Well(iWell).Ph(Well(iWell).jj3)); %%%% EQ
+        Well(iWell).background_amp=nanstd(Well(iWell).s(Well(iWell).jj3)); %%%% EQ
+        
+        ref(iWell) = Well(iWell).date1; %%%% EQ
+        Well(iWell).t=Well(iWell).T-ref(iWell); %%%% EQ
+        epi(iWell)=EQ_t-ref(iWell); %%%% EQ
 
-% ref(iWell) = Well(iWell).date1; %%%% EQ
-%Well(iWell).t=Well(iWell).T-ref(iWell); %%%% EQ
-% epi(iWell)=EQ_t-ref(iWell); %%%% EQ
-
+        plot([EQ_t EQ_t],[-10 10]+nanmean(Well(iWell).Ph),'r--','LineWidth',0.5);hold on %%%% EQ
+        plot(Well(iWell).T(Well(iWell).jj1),Well(iWell).Ph(Well(iWell).jj1),'r.','MarkerSize',6) %%%% EQ
+        plot(Well(iWell).T(Well(iWell).jj2),Well(iWell).Ph(Well(iWell).jj2),'r.','MarkerSize',6) %%%% EQ
+        hold on
+    end
+end
 
 
 figure;clf;hold on
@@ -133,20 +192,20 @@ title(Well(iWell).name);
 % plot([EQ_t EQ_t],[nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2],'r--','LineWidth',0.5);hold on %%%% EQ
 % plot(Well(iWell).T(Well(iWell).jj1),Well(iWell).s(Well(iWell).jj1),'r.','MarkerSize',6) %%%% EQ
 % plot(Well(iWell).T(Well(iWell).jj2),Well(iWell).s(Well(iWell).jj2),'r.','MarkerSize',6) %%%% EQ
-%xlim([0 Well(iWell).t(end)+t_win/2]);
-% xlim([datenum('PlotTime3') datenum('PlotTime4')])
-% ylim([nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2])
+% %xlim([0 Well(iWell).t(end)+t_win/2]);
+% % xlim([datenum('PlotTime3') datenum('PlotTime4')])
+% % ylim([nanmean(1./(Well(iWell).A))*0.8 nanmean(1./(Well(iWell).A))*1.2])
 ylabel('Amplitude (1/m)');
 datetick('KeepLimits')
 hold off;
 
 subplot('position',[0.15,0.28,0.7,0.25])
 plot(Well(iWell).T,Well(iWell).Ph,'.','MarkerSize',6);
+ylabel('Phase (degree)')
 hold on;
 % plot([EQ_t EQ_t],[-10 10]+nanmean(Well(iWell).Ph),'r--','LineWidth',0.5);hold on %%%% EQ
 % plot(Well(iWell).T(Well(iWell).jj1),Well(iWell).Ph(Well(iWell).jj1),'r.','MarkerSize',6) %%%% EQ
 % plot(Well(iWell).T(Well(iWell).jj2),Well(iWell).Ph(Well(iWell).jj2),'r.','MarkerSize',6) %%%% EQ
-ylabel('Phase (degree)')
 hold on
 % xlim([datenum('PlotTime3') datenum('PlotTime4')])
 datetick('KeepLimits')
@@ -164,7 +223,7 @@ print(gcf,'-dpng',strcat(Well(iWell).name,'_',num2str(i),'_amp_pha.png'))
         
         
         
-%Plot one graph with all ports
+%% Plot one graph with all ports
 
 plotLineMarker = {'+','o','*','.','x','s','d','^','v','>','<','p','h'};
 plotLineColor = {'b', 'k', 'r', 'g', 'm', 'c', 'k', 'b', 'r', 'g', 'k', 'r', 'g'};

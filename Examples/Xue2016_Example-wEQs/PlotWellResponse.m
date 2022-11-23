@@ -16,7 +16,7 @@ Well(iWell).Ph(ff)=Well(iWell).Ph(ff)-360;
 
 
 
-UserParam;
+UserParam;jjkkkjjkkj
 
 % Start plotting
 figure;clf;hold on
