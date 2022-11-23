@@ -487,7 +487,7 @@ if __name__== "__main__":
             #  f.write('D_avg   = {:.4e} [m2/s]\n'.format(T_avg/S_avg))
             #  f.write('R_avg   = {:.2f} [m]\n'.format(np.sqrt(T_avg/S_avg*tau)))
         print()
-        if 'win' in platform:
+        if ('win' in platform)&('darwin' not in platform):
             os.system('type '+tname)
         else:
             os.system('cat '+tname)      	

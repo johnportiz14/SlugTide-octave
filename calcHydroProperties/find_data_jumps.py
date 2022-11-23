@@ -131,10 +131,10 @@ if __name__== "__main__":
         f.write('  - threshold = {}°\n'.format(thresh))
         f.write('------------------------------------------------\n')
         [f.write(str(bjp)+'\n') for bjp in big_jumps_pytime]
-    if 'win' in platform:
+    if ('win' in platform)&('darwin' not in platform):
         os.system('type '+tname)
     else:
-        os.system('cat '+tname)  
+        os.system('cat '+tname)
         #print()
 #    print('Detected {} big jumps'.format(len(big_jumps_pytime)))
 #    print('  - threshold = {}°\n'.format(thresh))
