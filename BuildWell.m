@@ -190,7 +190,8 @@ if format=='S' % simple format
                         datenum(noisestart6,F) datenum(noiseend6,F)     %%
                         datenum(noisestart7,F) datenum(noiseend7,F)     %%
                         datenum(noisestart8,F) datenum(noiseend8,F)     %%
-                        datenum(noisestart9,F) datenum(noiseend9,F)];  %<-- [JPO] NEW 1/1/2022
+                        datenum(noisestart9,F) datenum(noiseend9,F)
+                        datenum(noisestart10,F) datenum(noiseend10,F)];  %<-- [JPO] NEW 11/29/2022
 %            Well.noise=[datenum(noisestart1) datenum(noiseend1)     %%
 %                        datenum(noisestart2) datenum(noiseend2)     %%
 %                        datenum(noisestart3) datenum(noiseend3)     %%
@@ -199,7 +200,7 @@ if format=='S' % simple format
 %                        datenum(noisestart6) datenum(noiseend6)     %%
 %                        datenum(noisestart7) datenum(noiseend7)     %%
 %                        datenum(noisestart8) datenum(noiseend8)     %%
-%                        datenum(noisestart9) datenum(noiseend9)];  %<-- [JPO] NEW 1/1/2022
+%                        datenum(noisestart9) datenum(noiseend9)];  %<-- [JPO] NEW 11/1/2022
 
             Well.dom=dom;
 
