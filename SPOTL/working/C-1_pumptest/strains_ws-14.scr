@@ -1,0 +1,21 @@
+#!/bin/sh
+# Calculate theoretical earth tides with ertid at WS-14 from C-1 Pumptest example 
+# Santa Susana Field Laboratory (SSFL), CA: 34.2320° N, 118.6960° W
+# 1-minute sample spacing (1min/60(min/hr) = 0.016667 hr)
+# begins 2007/07/01 
+#----(outputs strain along azimuth 0 and 90 -- add together to get areal strain)
+../bin/ertid << END
+2003 182  0
+2004 182  0
+0.01666666666666666666666666666666666666666667
+t
+34.2320
+-118.6960
+0
+0
+2
+0
+90
+th0_ssfl-ws-14
+th90_ssfl-ws-14
+END

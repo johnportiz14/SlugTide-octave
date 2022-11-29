@@ -1,0 +1,17 @@
+#!/bin/sh
+#-------------------------------------------------------
+# Loop through all Earth tides calculations
+#-------------------------------------------------------
+# Run from ~/spotl/working directory
+cwd=$PWD
+
+dir="Gierke"
+
+for f in $dir/calc_earthTides_*.scr;
+do
+#    echo ".$f"; 
+    echo "Looping through all calc_earthTides_<>.scr scripts..."
+    ./$f; 
+done
+
+echo "  Done with loop script." 

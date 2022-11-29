@@ -1,0 +1,72 @@
+#!/bin/sh
+#-------------------------------------------------------
+# Calculate Earth tides
+#-------------------------------------------------------
+# Run from ~/spotl/working directory
+#---- Set local variables for this script
+well=2
+lat=36.4072
+lon=-105.5734
+
+startyear=2000
+endyear=2020
+startdaynum=52
+enddaynum=31
+dt_seconds=300
+dt_hrs=$(echo "$dt_seconds/60./60." | bc -l)
+
+echo "-------------------"
+echo "Well Name: $well"
+echo "lat : $lat"
+echo "long : $lon"
+echo "-------------------"
+cwd=$PWD
+# oceandir="Gierke/ocean_strains"     #<-- not needed 
+earthdir="Gierke/earth_strains"
+# combdir="Gierke/combined_strains"   #<-- not needed
+# Make $earthdir subdirectory if doesn't exist
+mkdir -p $earthdir
+
+#-------------------------------------------------------
+#           EARTH TIDE
+#-------------------------------------------------------
+# Calculate theoretical earth tides with ertid 
+#----(outputs strain along azimuth 0 and 90 -- add together to get areal strain)
+echo "Calculating earth tides..."
+echo ""
+../bin/ertid << END > $earthdir/written_ertid_$well.scr
+$startyear $startdaynum  0
+$endyear $enddaynum  0
+$dt_hrs
+t
+$lat
+$lon
+0
+0
+2
+0
+90
+$earthdir/th0_$well
+$earthdir/th90_$well
+END
+
+# Calculate nterms from number of lines in output file
+nterms=$(wc -l < $earthdir/th0_$well)
+echo "  Done."
+
+
+#-------------------------------------------------------
+#      COMBINE AZIMUTHS TO GET AREAL STRAIN 
+#-------------------------------------------------------
+echo "Combining azimuths for areal strain..."
+cd $earthdir
+# Copy the script into the $earthdir if not already there
+cp ../compile_areal_strain.py .
+# Call the python script with $well as the identifier argument
+python compile_areal_strain.py $well 
+rm compile_areal_strain.py -f
+cd $cwd
+echo "  Done."
+
+echo -e "\n-----------------------------------------"
+echo "Done with everything."

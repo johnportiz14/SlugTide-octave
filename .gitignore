@@ -69,4 +69,6 @@ Examples/**/data/processed/.*
 # Ignore all TideSynth areal strains files (can be large >50 MB)
 TideSynth/*txt
 
+# Ignore output that might go into the dummy SPOTL folder 
+SPOTL/**/*txt
 

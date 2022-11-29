@@ -1,0 +1,117 @@
+#!/bin/sh
+#-------------------------------------------------------
+# Calculate Oceanic Tides(M2) + Earth tides 
+#-------------------------------------------------------
+# Run from ~/spotl/working directory
+#---- Set local variables for this script
+well=dw11
+lat=36.89
+lon=-121.605
+
+startyear=2014
+endyear=2015
+startdaynum=96
+enddaynum=282 
+dt_seconds=120
+dt_hrs=$(echo "$dt_seconds/60./60." | bc -l)
+
+echo "-------------------"
+echo "Well Name: $well"
+echo "lat : $lat"
+echo "long : $lon"
+echo "-------------------"
+cwd=$PWD
+oceandir="Xue2016/ocean_strains"
+earthdir="Xue2016/earth_strains"
+combdir="Xue2016/combined_strains"
+# Make those subdirectories if they don't exist
+mkdir -p $oceandir
+mkdir -p $earthdir
+mkdir -p $combdir
+
+#-------------------------------------------------------
+#           EARTH TIDES
+#-------------------------------------------------------
+# Calculate theoretical earth tides with ertid 
+#----(outputs strain along azimuth 0 and 90 -- add together to get areal strain)
+# python -c "print($dt_seconds/60./60.)" 
+echo "Calculating earth tides..."
+echo ""
+# ../bin/ertid << END > $earthdir/written_ertid_$well.scr
+# Write to a file then call ertid with that file as input
+cat << END > $earthdir/written_ertid_$well.scr
+$startyear $startdaynum  0
+$endyear $enddaynum  0
+$dt_hrs
+t
+$lat
+$lon
+0
+0
+2
+0
+90
+$earthdir/th0_$well
+$earthdir/th90_$well
+END
+# Now run ertid with that file
+../bin/ertid < $earthdir/written_ertid_$well.scr
+
+# Calculate nterms from number of liens in output file
+nterms=$(wc -l < th0_$well)
+echo "  Done."
+
+#-------------------------------------------------------
+#           OCEAN TIDES
+#-------------------------------------------------------
+# polymake creates a polygon that excludes the Gulf of California using a 'here' document
+echo "Calculating ocean tides..."
+../bin/polymake << EOF > poly.tmp
+- cortez.1976
+EOF
+# ../bin/nloadf PFO 36.93 -121.616  1280 m2.got4p7.2004 gr.gbaver.wef.p01.ce l poly.tmp > ex1.f1
+# ../bin/nloadf PFO 36.93 -121.616  1280 m2.got4p7.2004 gr.gbaver.wef.p01.ce l poly.tmp + > ex1.f2
+../bin/nloadf PFO $lat $lon  1280 m2.got4p7.2004 gr.gbaver.wef.p01.ce l $oceandir/poly.tmp > $oceandir/ex1.f1
+../bin/nloadf PFO $lat $lon  1280 m2.got4p7.2004 gr.gbaver.wef.p01.ce l $oceandir/poly.tmp + > $oceandir/ex1.f2
+# cat ex1.f1 ex1.f2 | ../bin/loadcomb c > ex1.f3
+cat $oceandir/ex1.f1 $oceandir/ex1.f2 | ../bin/loadcomb c > $oceandir/ex1.f3
+
+# Read from load file and write out the harmonic constants suitable for tidal prediction by hartid
+#    - (l) want extensional strain @ azimuth 0° and 90°
+
+#---- HARPRP
+#       get 0° and 90° azimuth
+# cat ex1.f3 | ../bin/harprp l 0 > $oceandir/harp0
+# cat ex1.f3 | ../bin/harprp l 90 > $oceandir/harp90
+cat $oceandir/ex1.f3 | ../bin/harprp l 0 > $oceandir/harp0
+cat $oceandir/ex1.f3 | ../bin/harprp l 90 > $oceandir/harp90
+
+#---- HARTID
+# nterms number taken from ertid strain output
+# ---> "each output series is  ##### terms long"
+# cat $oceandir/harp0 | ../bin/hartid 2014 96 0 0 0  396721 120 > $oceandir/hart0
+# cat $oceandir/harp90 | ../bin/hartid 2014 96 0 0 0  396721 120 > $oceandir/hart90
+cat $oceandir/harp0 | ../bin/hartid $startyear $startdaynum 0 0 0  $nterms $dt_seconds > $oceandir/hart0
+cat $oceandir/harp90 | ../bin/hartid $startyear $startdaynum 0 0 0  $nterms $dt_seconds > $oceandir/hart90
+
+# Combine to get areal strain  (oceanic)
+cd $oceandir
+python combine_hartid.py
+cp hartidAreal.txt hartidAreal_$well.txt  
+cd $cwd
+
+echo "  Done."
+#-------------------------------------------------------
+#           EARTH + OCEAN TIDES
+#-------------------------------------------------------
+echo "Combining earth and ocean tides..."
+#---- COMBINE ERTID AND HARTID AREAL STRAINS
+cp $oceandir/hartidAreal.txt $combdir/hartidAreal.txt 
+cp $earthdir/ertidAreal.txt $combdir/ertidAreal.txt
+cd $combdir
+python combine_earthOceanTides.py
+# Give this a well-specific filename
+cp combinedArealStrains.txt combinedArealStrains_$well.txt 
+cd $cwd
+
+echo "  Done."
