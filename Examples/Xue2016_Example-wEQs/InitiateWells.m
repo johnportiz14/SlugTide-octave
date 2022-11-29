@@ -1,10 +1,14 @@
 % initialize wells%%    
 % Build the Well Structure
-% The user will edit the inputs for each well in the dataset to build the Well Structure for the test.
+%   - The user will edit the inputs for each well in the dataset to build the Well Structure for the test.
+%     If the water level data for all wells are formatted the same (e.g.,
+%     format 'S), simply copy that section and edit the iWell number and file
+%     names for each well.
+%   - Comment out iWell blocks for formats you aren't using.
 
-% Multiple wells, all formatted the same
+% Template for wells with format 'S'
 iWell=1;
-        WellInitial(iWell).filename='data/wl_DW4N.csv'; % name of data file for Well 1
+        WellInitial(iWell).filename='data/processed/wl_DW4N.csv'; % name of data file for Well 1
         WellInitial(iWell).Wellname='Well-DW4'; % name of Well 1
         WellInitial(iWell).format='S'; % format code for Well 1
         WellInitial(iWell).startrow=1;%610000;%152; % (for some reason, doesn't seem to like a startrow of 1 or 2) start row of data to be analyzed from csv file
@@ -23,7 +27,7 @@ iWell=1;
         WellInitial(iWell).dom=37.41+46.4; % use meters from Table1 (add WL depth + top of Open INterv. to WT) (???)
  
 iWell=2;
-        WellInitial(iWell).filename='data/wl_DW13.csv'; % name of data file for Well 1
+        WellInitial(iWell).filename='data/processed/wl_DW13.csv'; % name of data file for Well 1
         WellInitial(iWell).Wellname='Well-DW13'; % name of Well 1
         WellInitial(iWell).format='S'; % format code for Well 1
         WellInitial(iWell).startrow=1;%610000;%152; % (for some reason, doesn't seem to like a startrow of 1 or 2) start row of data to be analyzed from csv file
@@ -36,13 +40,13 @@ iWell=2;
 %         % (HAVE NOT MODIFIED NOISE YET) !!!!!
         % From Xue2016, DW13 was jammed during August-November 2014
         WellInitial(iWell).noisestart1='2014-8-1 00:00'; % start of noise in data
-        WellInitial(iWell).noiseend1='2014-12-6 00:00'; % end of noise in data
+        WellInitial(iWell).noiseend1='2014-11-1 00:00'; % end of noise in data
         
         doi=2624.67; % depth to open interval in ft (800 m)
         WellInitial(iWell).dom=(doi)*0.3048; % convert depth to open (do) interval to meters
 
 iWell=3;
-        WellInitial(iWell).filename='data/wl_DW2.csv'; % name of data file for Well 1
+        WellInitial(iWell).filename='data/processed/wl_DW2.csv'; % name of data file for Well 1
         WellInitial(iWell).Wellname='Well-DW2'; % name of Well 1
         WellInitial(iWell).format='S'; % format code for Well 1
         WellInitial(iWell).startrow=1;%610000;%152; % (for some reason, doesn't seem to like a startrow of 1 or 2) start row of data to be analyzed from csv file
@@ -60,7 +64,7 @@ iWell=3;
         WellInitial(iWell).dom=(doi)*0.3048; % convert depth to open (do) interval to meters
 
 iWell=4;
-        WellInitial(iWell).filename='data/wl_DW11.csv'; % name of data file for Well 1
+        WellInitial(iWell).filename='data/processed/wl_DW11.csv'; % name of data file for Well 1
         WellInitial(iWell).Wellname='Well-DW11'; % name of Well 1
         WellInitial(iWell).format='S'; % format code for Well 1
         WellInitial(iWell).startrow=2;%610000;%152; % 

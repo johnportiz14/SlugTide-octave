@@ -3,10 +3,10 @@
 % Inputs below are listed by the script where they are used.
 
 %MasterWell.m
-NWells=4;%1;%2;
+NWells=4;   % Total number of wells
 
 %LoadTides.m
-Tide_dt=2/24/60;%1/24/60; %tidal sample spacing in units of days for the synthetic tidal model
+Tide_dt=2/24/60; %[days] tidal sample spacing in units of days for the synthetic tidal model (check SPOTL input)
 
 %BuildWell.m
 dt=10/24/60;%2/24/60;%10/24/60; % time sample spacing of the well data in units of days
@@ -20,6 +20,8 @@ cUTC=0;%7/24; %[days] correction from time of collected data to UTC (if collecte
             % may require some preprocessing if Daylight Savings Time is not already corrected for.
             % data downloaded in this example may already have been
             % corrected...
+            % SIGN CONVENTION: if time zone is reported as [UTC+8], use the
+            % negative sign here (time correction TO UTC), and vice versa.
             
 %PlotOriginalWL.m
 PlotTime1='2014-04-08'; % Date of beginning of plot in 'YYYY-MM-DD' format
@@ -28,9 +30,7 @@ PlotTime1='2014-04-08'; % Date of beginning of plot in 'YYYY-MM-DD' format
 PlotTime2='2015-10-08'; % Date of ending of plot in 'YYYY-MM-DD' format
     % beginning and ending of plot should match the beginning and ending of the dataset timeframe.
 
-% %PlotOriginalWL.m, PlotWellResponse.m
-% EQtime='2010-02-26 00:00:00'; % Date of earthquake in 'YYYY-MM-DD hh:mm:ss' format
-% %%%%[JPO] attempt to implement multiple earthquakes
+% % %PlotOriginalWL.m, PlotWellResponse.m
 EQtime=[
         '2014-11-20 00:00:00';
         '2014-12-06 00:00:00'

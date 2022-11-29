@@ -16,8 +16,8 @@ dom=WellInitial.dom;
 % noisestart1=WellInitial.noisestart1;          [JPO]
 % noiseend1=WellInitial.noiseend1;              [JPO]                          %%      
 % [JPO] Add extra noise slots. If not detected in InitiateWell.m, sets to some arbitrary old date %%
-defaultNoiseDate_start = '1900-01-01 00:00:00'; %default start date for noise  %%
-defaultNoiseDate_end   = '1900-01-02 00:00:00'; %default end   date for noise  %%
+defaultNoiseDate_start = '1900-01-01 00:00'; %default start date for noise  %%
+defaultNoiseDate_end   = '1900-01-02 00:00'; %default end   date for noise  %%
 if isfield(WellInitial,'noisestart1'); noisestart1=WellInitial.noisestart1;    %%
 else noisestart1=defaultNoiseDate_start; 
 end
@@ -181,16 +181,25 @@ if format=='S' % simple format
             % define periods that will be eliminated in processing due to noise
             % first column is beginning of period; second is end
 %             Well.noise=[datenum(noisestart1) datenum(noiseend1)];  %<-- ORIGINAL
-            Well.noise=[datenum(noisestart1) datenum(noiseend1)     %%
-                        datenum(noisestart2) datenum(noiseend2)     %%
-                        datenum(noisestart3) datenum(noiseend3)     %%
-                        datenum(noisestart4) datenum(noiseend4)     %%
-                        datenum(noisestart5) datenum(noiseend5)     %%
-                        datenum(noisestart6) datenum(noiseend6)     %%
-                        datenum(noisestart7) datenum(noiseend7)     %%
-                        datenum(noisestart8) datenum(noiseend8)     %%
-                        datenum(noisestart9) datenum(noiseend9)     %%
-                        datenum(noisestart10) datenum(noiseend10)]; %<-- [JPO] NEW 1/1/2022
+            F = 'yyyy-mm-dd HH:MM';                                     %% [JPO] <- octave needs this
+            Well.noise=[datenum(noisestart1,F) datenum(noiseend1,F)     %%
+                        datenum(noisestart2,F) datenum(noiseend2,F)     %%
+                        datenum(noisestart3,F) datenum(noiseend3,F)     %%
+                        datenum(noisestart4,F) datenum(noiseend4,F)     %%
+                        datenum(noisestart5,F) datenum(noiseend5,F)     %%
+                        datenum(noisestart6,F) datenum(noiseend6,F)     %%
+                        datenum(noisestart7,F) datenum(noiseend7,F)     %%
+                        datenum(noisestart8,F) datenum(noiseend8,F)     %%
+                        datenum(noisestart9,F) datenum(noiseend9,F)];  %<-- [JPO] NEW 1/1/2022
+%            Well.noise=[datenum(noisestart1) datenum(noiseend1)     %%
+%                        datenum(noisestart2) datenum(noiseend2)     %%
+%                        datenum(noisestart3) datenum(noiseend3)     %%
+%                        datenum(noisestart4) datenum(noiseend4)     %%
+%                        datenum(noisestart5) datenum(noiseend5)     %%
+%                        datenum(noisestart6) datenum(noiseend6)     %%
+%                        datenum(noisestart7) datenum(noiseend7)     %%
+%                        datenum(noisestart8) datenum(noiseend8)     %%
+%                        datenum(noisestart9) datenum(noiseend9)];  %<-- [JPO] NEW 1/1/2022
 
             Well.dom=dom;
 

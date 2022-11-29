@@ -28,9 +28,14 @@ MANIFEST
 
 old/
 
-# Ignore output files in example directoreis
+# Ignore output files in example directories
+Examples/**/Results
+Examples/**/WellStruct
 Examples/**/Results.mat 
 Examples/**/WellStruct.mat 
+Examples/**/*detrended.csv
+Examples/**/*amp.csv
+Examples/**/*pha.csv
 Examples/C-1_Pump_Test_Example/*.pdf
 Examples/C-1_Pump_Test_Example/*.png
 Examples/C-1_Pump_Test_JPO_tides/*.pdf

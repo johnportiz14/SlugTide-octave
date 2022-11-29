@@ -1,0 +1,16 @@
+# Template wellInfo file 
+{'well1': {'prefix': 'Well-1_1',
+         'r_c': 0.0841375,
+         'r_w': 0.0841375,
+         'b'  : 121.92,  
+         'z'  : 131.,      
+         'flowModel': 'vertical', #horizontal or vertical
+         },
+'well2': {'prefix': 'Well-2_1',
+         'r_c': 0.0508,
+         'r_w': 0.0508,
+         'b'  : 123.7488,
+         'z'  : 401.42,
+         'flowModel': 'horizontal', #horizontal or vertical
+         },
+}

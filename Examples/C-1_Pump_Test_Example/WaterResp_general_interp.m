@@ -37,7 +37,7 @@ ttide=Well(iWell).ttide; % time for synthetic tide
 tide=Well(iWell).tide'; %  synthetic tide
 
 % cut the times in the data
-[dum ind_data1]=min(abs(tUTC-date1));  %[JPO] not sure where "dum" comes from originally
+[dum ind_data1]=min(abs(tUTC-date1));
 [dum ind_data2]=min(abs(tUTC-date2));
 if (length(ind_data2)==0)
     ind_data2=length(datam);
@@ -113,6 +113,13 @@ tidecut_f=filtfilt(b,a,tidecut);
 Wcuti_f_ne0=Wcuti_f~=0;
 tidecut_f=tidecut_f.*(Wcuti_f_ne0);
 %%%%%%%%
+
+%%%%%%%%%%%%%%%
+% [JPO] new - export the filtered, detrended data for external analysis
+filename = strcat(Well(iWell).name,'_',num2str(iport),'_filtered_detrended.csv');
+twocol = [ tcuti', -Wcuti_f' ];
+dlmwrite(filename,twocol,'precision',20);  % csvwrite() cuts off the decimal precision
+%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%
 t_win=t_win; % days

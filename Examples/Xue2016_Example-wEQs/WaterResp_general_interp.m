@@ -4,7 +4,7 @@
 clearvars -except iWell Well
 UserParam;
 
-% iWell
+iWell
 %%%%
 
 Nports=Well(iWell).num_ports;
@@ -50,9 +50,7 @@ TWcut=tUTC(ind_data1:ind_data2);
 
 tcuti=[date1:dt:date2];
 Wcuti=interp1(TWcut,Wcut,tcuti); 
-% %debug
-% display('Wcuti(1)')
-% display(Wcuti(1))
+
 
 %%%%%%%%%%%%%%%%%%%%
 [dum ind_synth1]=min(abs(ttide-date1));
@@ -82,17 +80,9 @@ Well(iWell).ttide_cut=ttide_cut;
 
 %%%%%%%
 Nque=1/dt/2;
-f_low=1/(30/24)/Nque; % 30 hr
-f_hig=1/(10/24)/Nque; % 10 hr
+f_low=1/(freq_low)/Nque; 
+f_hig=1/(freq_high)/Nque; 
 [b,a]=butter(2,[f_low f_hig],'bandpass');
-
-% %debug
-% display('b')
-% display(b)
-% display('a')
-% display(a)
-% display('Wcuti(1)')
-% display(Wcuti(1))
 
 Wcuti=(Wcuti-mean(nonzeros(Wcuti))).*(Wcuti~=0);
 Wcuti=detrend(Wcuti).*(Wcuti~=0);
@@ -123,6 +113,13 @@ tidecut_f=filtfilt(b,a,tidecut);
 Wcuti_f_ne0=Wcuti_f~=0;
 tidecut_f=tidecut_f.*(Wcuti_f_ne0);
 %%%%%%%%
+
+%%%%%%%%%%%%%%%
+% [JPO] new - export the filtered, detrended data for external analysis
+filename = strcat(Well(iWell).name,'_',num2str(iport),'_filtered_detrended.csv');
+twocol = [ tcuti', -Wcuti_f' ];
+dlmwrite(filename,twocol,'precision',20);  % csvwrite() cuts off the decimal precision
+%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%
 t_win=t_win; % days

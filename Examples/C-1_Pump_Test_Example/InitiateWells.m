@@ -1,8 +1,12 @@
 % initialize wells%%    
 % Build the Well Structure
-% The user will edit the inputs for each well in the dataset to build the Well Structure for the test.
+%   - The user will edit the inputs for each well in the dataset to build the Well Structure for the test.
+%     If the water level data for all wells are formatted the same (e.g.,
+%     format 'S), simply copy that section and edit the iWell number and file
+%     names for each well.
+%   - Comment out iWell blocks for formats you aren't using.
 
-
+% Template for wells with format 'S'
 iWell=1;
         WellInitial(iWell).filename='WS-14_simple1.csv'; % name of data file for Well A
         WellInitial(iWell).Wellname='WS-14 simple'; % name of Well A
@@ -20,6 +24,7 @@ iWell=1;
         doi=40; % depth to open interval in ft
         WellInitial(iWell).dom=(doi)*0.3048; % convert to meters
 
+   % Template for wells with format 'A'     
    iWell=2;
         WellInitial(iWell).filename='WS-14.csv'; % name of data file for Well A
         WellInitial(iWell).Wellname='WS-14'; % name of Well A
@@ -38,6 +43,7 @@ iWell=1;
         WellInitial(iWell).dom=(doi)*0.3048; % convert to meters
        
         
+   % Template for wells with format 'B' (multiple ports)     
    iWell=3;
         WellInitial(iWell).filename='HAR-16.csv'; % name of data file for Well B
         WellInitial(iWell).Wellname='HAR-16'; % name of Well B

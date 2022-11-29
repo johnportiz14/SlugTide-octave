@@ -58,6 +58,7 @@ for iport=1:Nports
         title(Well(iWell).name);
         set(amp, 'MarkerEdgeColor', plotLineColor{iport}, 'Marker', plotLineMarker{iport});
         set(gca,'YDir','reverse');
+        set(gca,'XScale', 'log');
         xlabel('average Amplitude (1/m)');
         ylabel('Depth (m)');
        

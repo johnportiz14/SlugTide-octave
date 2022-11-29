@@ -26,8 +26,8 @@ hold on;
 % % plot([EQ_t EQ_t],[min(data)-0.02 max(data)+0.02],'r--') %%%% EQ
 % % %%%% [JPO] loop through multiple earthquakes (if present)
 if exist("EQtime","var")
-    for i=1:size(EQtime,1)                      %%%% EQ
-        EQ_t=datenum(EQtime(i,:))+cUTC; %%%%UTC %%%% EQ
+    for j=1:size(EQtime,1)                      %%%% EQ
+        EQ_t=datenum(EQtime(j,:))+cUTC; %%%%UTC %%%% EQ
         plot([EQ_t EQ_t],[min(data)-0.02 max(data)+0.02],'r--') %%%% EQ
     end                                         %%%% EQ
 end

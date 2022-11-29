@@ -4,6 +4,12 @@ clear all ;
 % catch
 % end
 % 
+% %%%%%%%%%%%%%% Determine if running in Octave
+isOctave = exist('OCTAVE_VERSION', 'builtin') ~= 0;
+% If Octave, load the required packages
+if isOctave
+    pkg load signal
+end
 
 % Establish parameters for processing of tidal response after the well
 % structure has been built

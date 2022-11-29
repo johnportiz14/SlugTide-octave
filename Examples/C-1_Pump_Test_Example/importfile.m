@@ -4,7 +4,7 @@ function [Column1,Column2,Column3,Column4,Column5,Column6,Column7,Column8,Column
 delimiter = ',';
 if nargin<=2
     startRow = 1;
-    endRow = 1e9;%inf;
+    endRow = 1e9; %inf;
 end
 
 %% Format string for each line of text:
@@ -35,8 +35,8 @@ fclose(fileID);
 
 %% Allocate imported array to column variable names
 switch FormatCode
-  
-    case 'S' % WS-14
+    
+  case 'S' % Well S
         DateTime = dataArray{:, 1};
         WL = dataArray{:, 2};
         Empty1 = dataArray{:, 3};
@@ -113,7 +113,7 @@ switch FormatCode
         Column36 = Empty34;
         Column37 = Empty35;
         
-case 'A' % WS-14
+case 'A' % Well A
         DateTime = dataArray{:, 1};
         ETmin = dataArray{:, 2};
         EThours = dataArray{:, 3};
@@ -191,7 +191,7 @@ case 'A' % WS-14
         Column37 = Empty30;
         
         
-     case 'B' % HAR-1
+     case 'B' %Well B
         DateTime = dataArray{:, 1};
         ETmin = dataArray{:, 2};
         EThours = dataArray{:, 3};

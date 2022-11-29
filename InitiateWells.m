@@ -8,13 +8,13 @@
 
 % Template for wells with format 'S'
 iWell=1;
-        WellInitial(iWell).filename='data/processed/WellS.csv'; % name of data file for Well 1
-        WellInitial(iWell).Wellname='Well-S'; % name of Well 1
-        WellInitial(iWell).format='S'; % format code for Well 1
+        WellInitial(iWell).filename='data/processed/WellS.csv'; % name of data file for Well Format S
+        WellInitial(iWell).Wellname='Well-S'; % name of Well Format S
+        WellInitial(iWell).format='S'; % format code for Well Format S
         WellInitial(iWell).startrow=2; % start row of data to be analyzed from csv file (use 1 if no header row)
         WellInitial(iWell).endrow=1e9; %inf; % end row of data to be analyzed from csv file
-        WellInitial(iWell).tidename='areal_strains_S.txt'; % name of synthetic tide for Well 1
-        WellInitial(iWell).nports=1; % number of ports in Well 1
+        WellInitial(iWell).tidename='areal_strains_S.txt'; % name of synthetic tide for Well Format S
+        WellInitial(iWell).nports=1; % number of ports in Well Format S
         
         % If there is more than one noise field in the data add start and
         % end dates as necessary. Remember to update BuildWell as well.
@@ -26,13 +26,13 @@ iWell=1;
 
    % Template for wells with format 'A'     
    iWell=2;
-        WellInitial(iWell).filename='data/processed/WellA.csv'; % name of data file for Well 2
-        WellInitial(iWell).Wellname='Well A'; % name of Well 2
-        WellInitial(iWell).format='A'; % format code for Well 2
-        WellInitial(iWell).startrow=55; % start row of data to be analyzed from csv file
+        WellInitial(iWell).filename='data/processed/WellA.csv'; % name of data file for Well Format A
+        WellInitial(iWell).Wellname='Well A'; % name of Well Format A
+        WellInitial(iWell).format='A'; % format code for Well Format A
+        WellInitial(iWell).startrow=55; % start row of data to be analyzed from csv file (use 1 if no header row)
         WellInitial(iWell).endrow=1e9; %inf; % end row of data to be analyzed from csv file
-        WellInitial(iWell).tidename='areal_strains_A.txt'; % name of synthetic tide for Well 2
-        WellInitial(iWell).nports=1; % number of ports in Well 2
+        WellInitial(iWell).tidename='areal_strains_A.txt'; % name of synthetic tide for Well Format A
+        WellInitial(iWell).nports=1; % number of ports in Well Format A
         
         % If there is more than one noise field in the data add start and
         % end dates as necessary. Remember to update BuildWell as well.
@@ -45,13 +45,13 @@ iWell=1;
         
    % Template for wells with format 'B' (multiple ports)     
    iWell=3;
-        WellInitial(iWell).filename='data/processed/WellB.csv'; % name of data file for Well 3
-        WellInitial(iWell).Wellname='Well B'; % name of Well 3
-        WellInitial(iWell).format='B'; % format code for Well 3
-        WellInitial(iWell).startrow=22;% start row of data to be analyzed from csv file
+        WellInitial(iWell).filename='data/processed/WellB.csv'; % name of data file for Well Format B
+        WellInitial(iWell).Wellname='Well B'; % name of Well Format B
+        WellInitial(iWell).format='B'; % format code for Well Format B
+        WellInitial(iWell).startrow=22;% start row of data to be analyzed from csv file (use 1 if no header row)
         WellInitial(iWell).endrow=1e9; %inf; % end row of data to be analyzed from csv file
-        WellInitial(iWell).tidename='areal_strains_B.txt'; % name of synthetic tide for Well 3
-        WellInitial(iWell).nports=8; % number of ports in Well 3
+        WellInitial(iWell).tidename='areal_strains_B.txt'; % name of synthetic tide for Well Format B
+        WellInitial(iWell).nports=8; % number of ports in Well Format B
         
         % If there is more than one noise field per well in the data add
         % start and end dates as necessary. Remember to update BuildWell as well.
