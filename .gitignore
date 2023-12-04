@@ -28,14 +28,28 @@ MANIFEST
 
 old/
 
+# Weird hidden files
+*.nfs*
+*.WellStruc*
+*.Results*
+*.Well*
+.DS_Store
+
 # Ignore output files in example directories
+Examples/**/output
 Examples/**/Results
 Examples/**/WellStruct
+Examples/**/.WellStruct
 Examples/**/Results.mat 
 Examples/**/WellStruct.mat 
 Examples/**/*detrended.csv
 Examples/**/*amp.csv
 Examples/**/*pha.csv
+*amp_ci95.csv
+*pha_ci95.csv
+*amp_stats.csv
+*pha_stats.csv
+*mcRespon
 Examples/C-1_Pump_Test_Example/*.pdf
 Examples/C-1_Pump_Test_Example/*.png
 Examples/C-1_Pump_Test_JPO_tides/*.pdf
