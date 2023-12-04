@@ -56,9 +56,11 @@ Examples/C-1_Pump_Test_JPO_tides/*.pdf
 Examples/C-1_Pump_Test_JPO_tides/*.png
 Examples/Xue2013_Example/*.pdf
 Examples/Xue2013_Example/*.png
+Examples/Xue2013_Example*/data/*.txt
 Examples/Xue2016_Example/*.pdf
 Examples/Xue2016_Example/*.png
 Examples/Xue2016_Example/*.csv
+Examples/Xue2016_Example*/data/*.txt
 Examples/Xue2016_Example-wEQs/*.pdf
 Examples/Xue2016_Example-wEQs/*.png
 

@@ -5,6 +5,11 @@
 %MasterWell.m
 NWells=3;   % Total number of wells
 
+%Monte-Carlo (MC) Uncertainty Propagation
+##MC=1;     % 0 (False) or 1 (True)
+##wl_precision=0.006; %[m] Well precision 
+##N_mc = 1e3; %1e4;  % number of Monte-Carlo simulations to perform
+
 %LoadTides.m
 Tide_dt=5/24/60; %[days] tidal sample spacing in units of days for the synthetic tidal model (check SPOTL input)
 

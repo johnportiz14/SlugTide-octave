@@ -8,13 +8,26 @@ Nports=Well(iWell).num_ports;
 %Plot graphs by port
         
 for i=1:Nports
-Well(iWell).T=Well(iWell).T0(:,i);
-Well(iWell).A=Well(iWell).A0(:,i);
-Well(iWell).Ph=Well(iWell).Ph0(:,i);
-ff=find(Well(iWell).Ph>180);
-Well(iWell).Ph(ff)=Well(iWell).Ph(ff)-360;
+  Well(iWell).T=Well(iWell).T0(:,i);
+  Well(iWell).A=Well(iWell).A0(:,i);
+  Well(iWell).Ph=Well(iWell).Ph0(:,i);
+  ff=find(Well(iWell).Ph>180);
+  Well(iWell).Ph(ff)=Well(iWell).Ph(ff)-360;
 
-
+  %(new) MC statistics
+  if MC==1;
+    %Standard Deviation
+    Well(iWell).A_std=Well(iWell).A0_std(:,i); % std already calculated as [1/m]
+    Well(iWell).Ph_std=Well(iWell).Ph0_std(:,i);
+    %95% Confidence Interval (lower, upper)  [2 columns per port]
+    Well(iWell).A_ci_z=Well(iWell).A0_ci_z(:,1:2,i); % ci_z already calculated as [1/m]
+    Well(iWell).Ph_ci_z=Well(iWell).Ph0_ci_z(:,1:2,i);
+    ff=find(Well(iWell).Ph_ci_z(:,1)>180);
+    Well(iWell).Ph_ci_z(ff,1)=Well(iWell).Ph_ci_z(ff,1)-360;
+    ff=find(Well(iWell).Ph_ci_z(:,2)>180);
+    Well(iWell).Ph_ci_z(ff,2)=Well(iWell).Ph_ci_z(ff,2)-360;
+  end
+  
 
 UserParam;
 
@@ -23,7 +36,16 @@ figure;clf;hold on
 subplot('position',[0.15,0.6,0.7,0.25])
 
 %AMPLITUDE RESPONSE
-plot(Well(iWell).T,1./Well(iWell).A,'.','MarkerSize',6)
+##  plot(Well(iWell).T,1./Well(iWell).A,'.','MarkerSize',6)
+if MC==0;
+  plot(Well(iWell).T,1./Well(iWell).A,'.','MarkerSize',6)
+else
+  cap_size=0;
+  % (w/ error) CI already calculated as 1/A --> do not need to reciprocal
+##  errorbar(Well(iWell).T, 1./Well(iWell).A, Well(iWell).A_std, '.','MarkerSize',6)%, 'CapSize', cap_size)
+  errorbar(Well(iWell).T, 1./Well(iWell).A, Well(iWell).A_std, '.')
+##  errorbar(Well(iWell).T,1./Well(iWell).A, 1./Well(iWell).A-Well(iWell).A_ci_z(:,1), Well(iWell).A_ci_z(:,2)-1./Well(iWell).A, '.')
+end
 
 
 hold on;
@@ -39,6 +61,13 @@ if exist("EQtime","var")
         mm=find(Well(iWell).T(kk)>t_pre & Well(iWell).T(kk)<t_post); %%%% EQ
         Well(iWell).Ph(mm)=NaN; %%%% EQ
         Well(iWell).A(mm)=NaN; %%%% EQ
+        %MC
+        if MC == 1;
+          Well(iWell).Ph_std(mm)=NaN; %%%% EQ
+          Well(iWell).A_std(mm)=NaN; %%%% EQ
+          Well(iWell).Ph_ci_z(mm,1:2)=NaN; %%%% EQ
+          Well(iWell).A_ci_z(mm,1:2)=NaN; %%%% EQ
+        endif
         Well(iWell).s=1./(Well(iWell).A); %%%% EQ
         Well(iWell).jj1=find(Well(iWell).T(kk)>t_pre-30 & Well(iWell).T(kk)<t_pre); %%%% EQ
         Well(iWell).pre_pha=nanmean(Well(iWell).Ph(Well(iWell).jj1)); %%%% EQ
@@ -69,7 +98,11 @@ end
 
     %PHASE LAG
     subplot('position',[0.15,0.28,0.7,0.25])
-    plot(Well(iWell).T,Well(iWell).Ph,'.','MarkerSize',6);
+    if MC==0;
+        plot(Well(iWell).T,Well(iWell).Ph,'.','MarkerSize',6);
+    else
+        errorbar(Well(iWell).T, Well(iWell).Ph, Well(iWell).Ph_std, '.')
+    end
     % add a zero-line if appropriate
     xl = get(gca,'XLim');
     yl = get(gca,'YLim');
@@ -91,6 +124,13 @@ if exist("EQtime","var")
         mm=find(Well(iWell).T(kk)>t_pre & Well(iWell).T(kk)<t_post); %%%% EQ
         Well(iWell).Ph(mm)=NaN; %%%% EQ
         Well(iWell).A(mm)=NaN; %%%% EQ
+        %MC
+        if MC == 1;
+          Well(iWell).Ph_std(mm)=NaN; %%%% EQ
+          Well(iWell).A_std(mm)=NaN; %%%% EQ
+          Well(iWell).Ph_ci_z(mm,1:2)=NaN; %%%% EQ
+          Well(iWell).A_ci_z(mm,1:2)=NaN; %%%% EQ
+        endif
         Well(iWell).s=1./(Well(iWell).A); %%%% EQ
         Well(iWell).jj1=find(Well(iWell).T(kk)>t_pre-30 & Well(iWell).T(kk)<t_pre); %%%% EQ
         Well(iWell).pre_pha=nanmean(Well(iWell).Ph(Well(iWell).jj1)); %%%% EQ
@@ -121,7 +161,7 @@ datetick('KeepLimits')
 print(gcf,'-dpdf',strcat(Well(iWell).name,'_',num2str(i),'_amp_pha.pdf'))
 print(gcf,'-dpng',strcat(Well(iWell).name,'_',num2str(i),'_amp_pha.png'))
 
-%[JPO] Write amplitude response and phase shift values to .csv
+%[JPO] Write amplitude response and phase shift values to .csv (time, val(or mean) )
 filename = strcat(Well(iWell).name,'_',num2str(i),'_amp.csv');
 twocol = [ Well(iWell).T, 1./Well(iWell).A ];
 dlmwrite(filename,twocol,'precision',20);  % csvwrite() cuts off the decimal precision
@@ -129,12 +169,42 @@ filename = strcat(Well(iWell).name,'_',num2str(i),'_pha.csv');
 twocol = [ Well(iWell).T, Well(iWell).Ph ];
 dlmwrite(filename,twocol,'precision',20);
 
+%(new) MC statistics (note, mean amp and pha are same as what's written above)
+if MC==1;
+  % Save these stats to text file (time, mean, stdev)
+  filename = strcat(Well(iWell).name,'_',num2str(i),'_amp_stats.csv');
+  threecol = [ Well(iWell).T, 1./Well(iWell).A, Well(iWell).A_std ];
+  dlmwrite(filename,threecol,'precision',20);  % csvwrite() cuts off the decimal precision
+  filename = strcat(Well(iWell).name,'_',num2str(i),'_pha_stats.csv');
+  threecol = [ Well(iWell).T, Well(iWell).Ph, Well(iWell).Ph_std ];
+  dlmwrite(filename,threecol,'precision',20);  % csvwrite() cuts off the decimal precision
+  % Also save lower and upper 95% Confidence Interval (time, lower_CI, upper_CI)
+  filename = strcat(Well(iWell).name,'_',num2str(i),'_amp_ci95.csv');
+  threecol = [ Well(iWell).T, 1./Well(iWell).A , Well(iWell).A_ci_z(:,1), Well(iWell).A_ci_z(:,2)];
+  dlmwrite(filename,threecol,'precision',20);  % csvwrite() cuts off the decimal precision
+  filename = strcat(Well(iWell).name,'_',num2str(i),'_pha_ci95.csv');
+  threecol = [ Well(iWell).T, Well(iWell).Ph, Well(iWell).Ph_ci_z(:,1), Well(iWell).Ph_ci_z(:,2)];
+  dlmwrite(filename,threecol,'precision',20);  % csvwrite() cuts off the decimal precision
+  
+  %Print out Mean Range of Confidence intervals
+  mean_A_std  = nanmean( Well(iWell).A_std);
+  mean_Ph_std = nanmean( Well(iWell).Ph_std );
+  mean_A_ci_z  = nanmean( [Well(iWell).A_ci_z(:,2)] - [Well(iWell).A_ci_z(:,1)] );
+  mean_Ph_ci_z = nanmean( [Well(iWell).Ph_ci_z(:,2) - Well(iWell).Ph_ci_z(:,1) ]);
+  printf('\n')
+  printf('Time-averaged St. Dev. of Amplitude [1/m] = %e\n', mean_A_std);
+  printf('Time-averaged St. Dev. of Phase     [deg] = %d\n\n', mean_Ph_std);
+  printf('Time-averaged 95%% CI of Amplitude   [1/m] = %e\n', mean_A_ci_z);
+  printf('Time-averaged 95%% CI of Phase       [deg] = %d\n', mean_Ph_ci_z);
+end
+
+
 % end
 
 end
 
 
-%% IF THERE ARE MULTIPLE PORTS  [JPO] (I have not edited this section)
+%% IF THERE ARE MULTIPLE PORTS  [JPO] (I have not edited this section)  !!!
     else
 
         for i=1:Nports
